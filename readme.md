@@ -17,6 +17,14 @@ Instll modules
 npm install
 ```
 
+If running with a local dynamodb you can use docker to start up an instance:
+
+```
+docker run -p 8000:8000 amazon/dynamodb-local
+```
+
+Otherwise running dynamodb will require Java.
+
 ### Installing
 
 Once you clone this git repository, navigate to the containing folder and run
@@ -27,6 +35,16 @@ npm start
 
 The program will load up and you will be presented with a QR code.
 Navigate to the url through the provided code to view your app.
+
+## Testing
+
+To test the server run the following command:
+
+```
+npm test
+```
+
+The http file in the test folder uses the rest client in vscode. 
 
 ## Built With
 
