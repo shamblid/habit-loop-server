@@ -7,24 +7,24 @@ class HabitResolver {
 
     }
 
-    getHabit(args) {
+    async getHabit(args) {
         const {
             user_id: userId,
             habit_id: habitId
         } = args;
+
         const Habit = new HabitModel();
 
         try {
             const results = await Habit.getHabit(userId, habitId);
-            console.log(results);
-            return results;
+            return results.Item;
         } catch (err) {
             console.log(err);
         }
     }
 
-    createUserHabit(args) {
-        
+    async createUserHabit(args) {
+        console.log(args);
         const Habit = new HabitModel();
 
         try {
@@ -36,3 +36,5 @@ class HabitResolver {
         }
     }
 }
+
+module.exports = new HabitResolver();

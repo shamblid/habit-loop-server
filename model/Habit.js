@@ -4,7 +4,10 @@ class Habit {
   constructor() {
     const config = require(`../config/${process.env.NODE_ENV}.json`);
     this.tableName = config.dynamodb.habitTable;
-
+    AWS.config.update({
+        region: "us-west-2",
+        endpoint: "http://localhost:8000"
+    });
     this.docClient = new AWS.DynamoDB.DocumentClient();
   }
 
@@ -23,7 +26,17 @@ class Habit {
    * @param { String } habitId Id of the habit to get
    * @return { Array } Returns array of userHabits
    */
-  async getHabit(userId) {}
+  async getHabit(userId, habitId) {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        habit_id: habitId,
+        created_at: userId
+      }
+    }
+
+    return this.docClient.get(params).promise();
+  }
 
   /**
    * Get the list of habits for a specific user
@@ -42,4 +55,4 @@ class Habit {
   }
 }
 
-exports.module = Habit;
+module.exports = Habit;

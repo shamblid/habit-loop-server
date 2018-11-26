@@ -24,10 +24,10 @@ const allPeopletest = {
         id: 'allPeople',
         query: `
             query {
-            animals {
-                origin
+                animals {
+                    origin
+                }
             }
-        }
     `,
     variables: { },
     context: { },
