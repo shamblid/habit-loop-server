@@ -16,6 +16,15 @@ class Habit {
    */
   async getUserHabits(userId) {}
 
+   /**
+   * Get specific habit for a user
+   *
+   * @param { String } userId User identification
+   * @param { String } habitId Id of the habit to get
+   * @return { Array } Returns array of userHabits
+   */
+  async getHabit(userId) {}
+
   /**
    * Get the list of habits for a specific user
    *

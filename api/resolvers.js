@@ -1,3 +1,4 @@
+const habits = require('./resolvers/habits');
 const defaultData = [
 	{
 		id: 1,
