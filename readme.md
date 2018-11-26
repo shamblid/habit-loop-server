@@ -30,7 +30,7 @@ Otherwise running dynamodb will require Java.
 Once you clone this git repository, navigate to the containing folder and run
 
 ```
-npm start
+NODE_ENV=test npm start
 ```
 
 The program will load up and you will be presented with a QR code.

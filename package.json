@@ -5,14 +5,26 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^2.1.0",
+    "aws-sdk": "^2.361.0",
     "express": "^4.16.4",
-    "graphql": "^14.0.2"
+    "graphql": "^14.0.2",
+    "lodash": "^4.17.11",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.9.0",
+    "graphql-tools": "^4.0.3",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "sinon": "^7.1.1",
+    "supertest": "^3.3.0"
   }
 }
