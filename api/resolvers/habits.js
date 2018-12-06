@@ -7,7 +7,7 @@ class HabitResolver {
         this.model = new HabitModel();
     }
     
-    async getUserHabits(args) {
+    async getHabits(args) {
         const {
             user_id: userId
         } = args;
@@ -23,23 +23,38 @@ class HabitResolver {
 
     async getHabit(args) {
         const {
-            user_id: userId,
-            habit_id: habitId
+            habit_id: habitId,
+            created_at: createdAt
         } = args;
 
-
         try {
-            const results = await this.model.getHabit(userId, habitId);
+            const results = await this.model.getHabit(habitId, createdAt);
+            console.log(results, 'getHabit');
             return results.Item;
         } catch (err) {
             console.log(err);
         }
     }
 
-    async createUserHabit(args) {
+    async createHabit(args) {
         try {
-            const results = await this.model.createUserHabit(args.input);
-            console.log(results, 'results');
+            const results = await this.model.create(args.input);
+            console.log(results, 'results createUserHabit');
+            return results;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async deleteHabit(args) {
+        const {
+            habit_id: habitId,
+            created_at: createdAt
+        } = args
+
+        try {
+            const results = await this.model.delete(habitId, createdAt);
+            console.log(results, 'results delete');
             return results;
         } catch (err) {
             console.log(err);
@@ -47,10 +62,8 @@ class HabitResolver {
     }
 
     async getAllHabits() {
-        console.log('here')
         try {
-            const results = await this.model.getAllHabits();
-            console.log(results)
+            const results = await this.model.scan();
             return results.Items;
         } catch (err) {
             console.log(err);

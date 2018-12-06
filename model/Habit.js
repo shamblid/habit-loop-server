@@ -6,10 +6,12 @@ class Habit {
     const config = require(`../config/${process.env.NODE_ENV}.json`);
     this.tableName = config.dynamodb.habitTable;
 
-    AWS.config.update({
-        region: "us-west-2",
-        endpoint: "http://localhost:8000"
-    });
+    if (process.env.NODE_ENV === 'test') {
+      AWS.config.update({
+          region: "us-east-1",
+          endpoint: "http://localhost:8000"
+      });
+    }
 
     this.docClient = new AWS.DynamoDB.DocumentClient();
     this.validator = new HabitValidator();
@@ -41,15 +43,15 @@ class Habit {
    * @param { String } habitId Id of the habit to get
    * @return { Array } Returns array of userHabits
    */
-  getHabit(userId, habitId) {
+  getHabit(habitId, createdAt) {
     const params = {
       TableName: this.tableName,
       Key: {
         habit_id: habitId,
-        created_at: userId
+        created_at: createdAt
       }
     }
-
+  console.log(params);
     return this.docClient.get(params).promise();
   }
 
@@ -60,7 +62,7 @@ class Habit {
    * @param { Object } newHabit Object containing details of the new habit
    * @return { Array } Returns array of userHabits
    */
-  async createUserHabit(newHabit) {
+  async create(newHabit) {
     this.validator.check(newHabit);
 
     const params = {
@@ -71,7 +73,19 @@ class Habit {
     return this.docClient.put(params).promise();
   }
 
-  async getAllHabits() {
+  async delete(habitId, createdAt) {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        habit_id: habitId,
+        created_at: createdAt
+      }
+    }
+
+    return this.docClient.delete(params).promise();
+  }
+
+  async scan() {
     const params = {
       TableName: this.tableName,
     };

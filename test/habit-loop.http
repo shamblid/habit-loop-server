@@ -1,15 +1,45 @@
-POST http://localhost:4000/graphql
+@localUrl = http://localhost:3000/graphql
+@qaUrl = {{https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql}}
+
+POST {{localUrl}}
 Content-Type: application/json
 
 {
     "query": "{\n hello \n}\n"
 }
 
-###
-POST http://localhost:4000/graphql
+#####################################################################################################################
+# Create habit
+POST {{localUrl}}
 Content-Type: application/json
 
 {
-    "query": "{\n  getHabit(user_id: \"1543011106394\", habit_id: \"f6d0f1fc-5c65-464a-9d46-6895737efdfe\") {\n    name\n  }\n}\n"
+    "query":"mutation {\n  createHabit(user_id: \"123\", input: {habit_id: \"321\", user_id: \"123\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
 }
 
+#####################################################################################################################
+# Get created habit
+POST {{localUrl}}
+Content-Type: application/json
+
+{
+    "query": "{\n  getHabit(habit_id: \"321\", created_at: \"now\") {\n    name\n  }\n}\n"
+}
+
+#####################################################################################################################
+# Get All Habits (dynamodb scan method)
+POST {{localUrl}}
+Content-Type: application/json
+
+{
+    "query":"{\n  getAllHabits(user_id: \"123\") {\n    name\n    user_id\n    habit_id\n    created_at\n  }\n}\n"
+}
+
+#####################################################################################################################
+# Delete habit we first created
+POST {{localUrl}}
+Content-Type: application/json
+
+{
+    "query":"mutation {\n  deleteHabit(habit_id: \"321\", created_at: \"now\") {\n    name\n    type\n  }\n}\n"
+}

@@ -3,12 +3,13 @@ const habits = require('./resolvers/habits');
 const resolvers = {
 	Query: {
 		getHabit: (_, args) => habits.getHabit(args),
-		getUserHabits: (_, args) => habits.getUserHabits(args),
+		getHabits: (_, args) => habits.getHabits(args),
 		getAllHabits: (_, args) => habits.getAllHabits()
 	},
 
 	Mutation: {
-		createUserHabit: (_, args) => habits.createUserHabit(args)
+		createHabit: (_, args) => habits.createHabit(args),
+		deleteHabit: (_, args) => habits.deleteHabit(args)
 	}
 };
 
