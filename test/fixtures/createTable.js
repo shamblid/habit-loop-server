@@ -24,10 +24,16 @@ _(resources)
         
         try {
             table = await dynamodb.createTable(properties).promise();
+            console.log(table);
+            console.log('hello?');
+
             collection.created.push(table);
         } catch(err) {
+            console.log(err);
+
             collection.failed.push(err);
         }
 
         return collection
     }, Promise.resolve({ created: [], failed: [] }))
+

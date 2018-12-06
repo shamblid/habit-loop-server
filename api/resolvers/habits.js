@@ -3,8 +3,22 @@ const HabitModel = require('../../model/Habit');
 // The resolver class will take the graphql queries and format them to 
 // to use in dynamodb queries.
 class HabitResolver {
-    getUserHabits(id) {
+    constructor() {
+        this.model = new HabitModel();
+    }
+    
+    async getUserHabits(args) {
+        const {
+            user_id: userId
+        } = args;
 
+
+        try {
+            const results = await this.model.getUserHabits(userId);
+            return results.Item;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async getHabit(args) {
@@ -13,10 +27,9 @@ class HabitResolver {
             habit_id: habitId
         } = args;
 
-        const Habit = new HabitModel();
 
         try {
-            const results = await Habit.getHabit(userId, habitId);
+            const results = await this.model.getHabit(userId, habitId);
             return results.Item;
         } catch (err) {
             console.log(err);
@@ -24,13 +37,21 @@ class HabitResolver {
     }
 
     async createUserHabit(args) {
-        console.log(args);
-        const Habit = new HabitModel();
-
         try {
-            const results = await Habit.createUserHabit(args.user_id, args.habit);
-            console.log(results);
+            const results = await this.model.createUserHabit(args.input);
+            console.log(results, 'results');
             return results;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async getAllHabits() {
+        console.log('here')
+        try {
+            const results = await this.model.getAllHabits();
+            console.log(results)
+            return results.Items;
         } catch (err) {
             console.log(err);
         }
