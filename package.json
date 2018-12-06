@@ -16,6 +16,7 @@
     "express": "^4.16.4",
     "graphql": "^14.0.2",
     "lodash": "^4.17.11",
+    "serverless-http": "^1.8.0",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
