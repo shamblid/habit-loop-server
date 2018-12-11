@@ -11,10 +11,17 @@ These instructions will get you a copy of the project up and running on your loc
 You'll need to have Node.js (version 8 or newer) installed on your computer:
 https://nodejs.org/en/
 
-Instll modules
+Install modules
 
 ```
 npm install
+```
+
+You will also need to install serverless or run serverless in the node_modules bin.
+I suggest installing serverless globally with:
+
+```
+npm install -g serverless
 ```
 
 If running with a local dynamodb you can use docker to start up an instance:
@@ -30,11 +37,10 @@ Otherwise running dynamodb will require Java.
 Once you clone this git repository, navigate to the containing folder and run
 
 ```
-NODE_ENV=test npm start
+NODE_ENV=dev serverless offline start
 ```
 
-The program will load up and you will be presented with a QR code.
-Navigate to the url through the provided code to view your app.
+You can then visit the graphql playground at localhost:3000/playground
 
 ## Testing
 
@@ -44,7 +50,7 @@ To test the server run the following command:
 npm test
 ```
 
-The http file in the test folder uses the rest client in vscode. 
+The http file in the test folder uses the rest client in vscode available [here](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 
 ## Built With
 
@@ -52,6 +58,7 @@ The http file in the test folder uses the rest client in vscode.
 * [GraphQL](https://graphql.org/) - Query Engine
 * [Apollo](https://github.com/apollographql/apollo-server/tree/master/packages/apollo-server-express) - Integrates Express and GraphQL
 * [DynamoDB](https://aws.amazon.com/dynamodb/) - NoSQL Database
+* [Serverless](https://serverless.com) - Framework for deploying a serverless service as an AWS Lambda
 
 ## Authors
 
