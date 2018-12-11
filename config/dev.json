@@ -1,0 +1,6 @@
+{
+    "dynamodb": {
+        "habitTable": "habit-records",
+        "userTable": "user-records"
+    }
+}
