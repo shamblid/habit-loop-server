@@ -1,8 +1,6 @@
 {
     "dynamodb": {
         "habitTable": "habit-records",
-        "userTable": "user-records",
-        "endpoint": "null",
-        "region": "us-east-1"
+        "userTable": "user-records"
     }
 }

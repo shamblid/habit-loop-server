@@ -6,6 +6,8 @@ class Habit {
     const config = require(`../config/${process.env.NODE_ENV}.json`);
     this.tableName = config.dynamodb.habitTable;
 
+    // Set AWS configs for tests if we have a local db
+    // Might be able to remove this with servless local dynamodb plugin
     if (process.env.NODE_ENV === 'test') {
       AWS.config.update({
           region: "us-east-1",
