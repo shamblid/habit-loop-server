@@ -53,7 +53,7 @@ class Habit {
         created_at: createdAt
       }
     }
-  console.log(params);
+    
     return this.docClient.get(params).promise();
   }
 
@@ -71,7 +71,7 @@ class Habit {
         TableName: this.tableName,
         Item: newHabit
     };
-    console.log(params, 'params');
+
     return this.docClient.put(params).promise();
   }
 
