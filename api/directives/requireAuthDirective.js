@@ -1,13 +1,14 @@
 const {
     SchemaDirectiveVisitor,
-    AuthenticationError
+    AuthenticationError,
 } = require('apollo-server-express');
-  
+  const { defaultFieldResolver } = require("graphql");
+
   class RequireAuthDirective extends SchemaDirectiveVisitor {
     visitFieldDefinition(field) {
+      console.log(field)
       const { resolve = defaultFieldResolver } = field;
       const { role } = this.args;
-      console.log(' we need to be here ');
       field.resolve = async function(...args) {
         const [, , ctx] = args;
         if (ctx.req && ctx.req.user) {
