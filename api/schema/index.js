@@ -1,5 +1,6 @@
 const { gql } = require('apollo-server-express');
 const habitDefs = require('./habit');
+const userDefs = require('./user');
 const postDefs = require('./post');
 
 const typeDefs = gql`
@@ -23,6 +24,7 @@ const typeDefs = gql`
     
     ${habitDefs}
     ${postDefs}
+    ${userDefs}
 `;
 
 module.exports = typeDefs;

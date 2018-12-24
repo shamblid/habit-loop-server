@@ -4,6 +4,7 @@ const serverless = require('serverless-http');
 const graphiql = require('graphql-playground-middleware-express').default;
 const bodyParser = require('body-parser');
 const app = express();
+
 const { typeDefs, resolvers, schemaDirectives } = require('./api');
 
 const server = new ApolloServer({
