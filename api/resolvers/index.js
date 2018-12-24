@@ -11,10 +11,7 @@ const resolvers = {
 		getHabit: (_, args) => habits.getHabit(args),
 		getHabits: (_, args) => habits.getHabits(args),
 		getAllHabits: (_, args) => habits.getAllHabits(),
-		posts: () => {
-			console.log('we are here, why?')
-			return mockPosts;
-		},
+		posts: () => mockPosts,
 	},
 
 	Mutation: {

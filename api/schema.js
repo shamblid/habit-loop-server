@@ -1,6 +1,10 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+	directive @requireAuth(
+		role: Role
+	) on FIELD_DEFINITION
+
 	enum Role {
 		MANAGER
 		USER
@@ -10,13 +14,13 @@ const typeDefs = gql`
 		getHabit(habit_id: String!, created_at: String!): Habit!
 		getHabits(user_id: String!): [Habit!]
 		getAllHabits(user_id: String!): [Habit!] 
-		posts: [Post] @requireAuth
+		posts: [Post] @requireAuth(role: MANAGER)
 	}
 	
 	type Mutation {
 		createHabit(user_id: String!, input: HabitInput): Habit
 		deleteHabit(habit_id: String!, created_at: String!): Habit
-		addHabitForUser(user_id: String!, input: HabitInput): Habit 
+		addHabitForUser(user_id: String!, input: HabitInput): Habit @requireAuth(role: MANAGER)
 	}
 
 	input HabitInput {
