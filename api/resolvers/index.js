@@ -1,4 +1,6 @@
 const habits = require('./habits');
+const users = require('./users');
+const _ = require('lodash');
 
 const mockPosts = [
 	{ id: 1, title: "Helvetica and Times New Roman walk into a bar. Get out of here! shouts the bartender. We don't serve your type!", ownerId: 1 },
@@ -20,4 +22,4 @@ const resolvers = {
 	}
 };
 
-module.exports = resolvers;
+module.exports = _.merge(resolvers, users);

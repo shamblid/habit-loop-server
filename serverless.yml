@@ -117,5 +117,22 @@ resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      
+      GlobalSecondaryIndexes:
+        -
+          IndexName: EmailIndex
+          KeySchema:
+            -
+              AttributeName: email
+              KeyType: HASH
+            -
+              AttributeName: created_at
+              KeyType: RANGE
+
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+           ReadCapacityUnits: 5
+           WriteCapacityUnits: 5
 
       TableName: user-records

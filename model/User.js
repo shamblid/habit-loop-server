@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const UserValidator = require('./validators/User');
 
-class Habit {
+class User {
   constructor() {
     const config = require(`../config/${process.env.NODE_ENV}.json`);
     this.tableName = config.dynamodb.userTable;
@@ -20,18 +20,18 @@ class Habit {
   }
 
    /**
-   * Get specific habit for a user
+   * Get specific User for a user
    *
-   * @param { String } userId User identification
-   * @param { String } habitId Id of the habit to get
-   * @return { Array } Returns array of userHabits
+   * @param { String } user_id User identification as the primary key in the dynamo table
+   * @param { String } created_at one of the keys of the dynamo table
+   * @return { Object } User object
    */
-  getById(id) {
+  getById(user_id, created_at) {
     const params = {
       TableName: this.tableName,
       Key: {
-        user_id: id,
-        created_at: createdAt
+        user_id,
+        created_at
       }
     }
     
@@ -39,10 +39,33 @@ class Habit {
   }
 
   /**
-   * Get the list of habits for a specific user
+   * Get specific User for a user
    *
-   * @param { Object } user Object containing details of the new habit
-   * @return { Array } Returns array of userHabits
+   * @param { String } user_id User identification as the primary key in the dynamo table
+   * @param { String } created_at one of the keys of the dynamo table
+   * @return { Object } User object
+   */
+  getByEmail(email) {
+    const params = {
+      TableName: this.tableName,
+      IndexName: 'EmailIndex',
+      KeyConditionExpression: '#email = :email',
+      ExpressionAttributeNames: {
+        '#email': 'email'
+      },
+      ExpressionAttributeValues: {
+        ':email': email
+      }
+    }
+    
+    return this.docClient.query(params).promise();
+  }
+
+  /**
+   * Get the list of Users for a specific user
+   *
+   * @param { Object } user Object containing details of the new User
+   * @return { Array } Returns array of userUsers
    */
   async create(user) {
     this.validator.check(user);
@@ -56,4 +79,4 @@ class Habit {
   }
 }
 
-module.exports = Habit;
+module.exports = User;

@@ -14,17 +14,18 @@ const userDefs = gql`
 	input UserInput {
 		id: String!
 		username: String!
+		password: String!
 		email: String!
 		created_at: String!
         role: [String!]
 	}
 
 	type User {
-		id: String!
-		username: String!
-		email: String!
-		created_at: String!
-        role: [String!]
+		user_id: String
+		username: String
+		email: String
+		created_at: String
+        role: [String]
     }
 `;
 

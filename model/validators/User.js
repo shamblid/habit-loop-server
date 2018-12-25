@@ -4,9 +4,10 @@ class UserValidator extends BaseValidator {
     constructor() {
         super();
         this.PARAM_TYPES = {
-            id: 'string',
+            user_id: 'string',
             username: 'string',
             email: 'string',
+            password: 'string',
             created_at: 'string',
             role: 'object',
         };
@@ -16,11 +17,12 @@ class UserValidator extends BaseValidator {
          * State is interpreted by creation, since we're creating it was present and therefore active.
          **/
         this.ALLOWED_PARAMS = [
-            id,
-            username,
-            email,
-            created_at,
-            role,
+            'user_id',
+            'username',
+            'email',
+            'password',
+            'created_at',
+            'role',
         ];
     }
 }
