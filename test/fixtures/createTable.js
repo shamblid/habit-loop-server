@@ -10,7 +10,6 @@ AWS.config.update({
 var dynamodb = new AWS.DynamoDB();
 
 const { Resources: resources = null } = YAML.load('./habit_table_structure.yaml');
-//YAML.load('C:\\Users\\shamblid\\Documents\\Projects\\habit-loop-server\\test\\fixtures\\habit_table_structure.yaml');
 
 _(resources)
     .pickBy(resource => {

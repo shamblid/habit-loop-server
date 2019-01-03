@@ -1,14 +1,32 @@
+const { ApolloServer } = require("apollo-server-express");
 const express = require('express'); 
 const serverless = require('serverless-http');
-const { ApolloServer, gql } = require('apollo-server-express');
 const graphiql = require('graphql-playground-middleware-express').default;
-
-const { typeDefs, resolvers } = require('./api');
-const PORT = process.env.PORT || 4000;
+const bodyParser = require('body-parser');
+const jwt = require('express-jwt')
 
 const app = express();
-const server = new ApolloServer({ typeDefs, resolvers });
+
+const { typeDefs, resolvers, schemaDirectives } = require('./api');
+
+const auth = jwt({
+  secret: 'supersecret',
+  credentialsRequired: false
+})
+
+app.use(bodyParser.json(), auth);
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  schemaDirectives,
+  context: async ({ req }) => ({
+    user: req.user
+  })
+});
+
 server.applyMiddleware({ app });
+
 
 app.get("/playground", graphiql({ endpoint: "/graphql" }));
 
