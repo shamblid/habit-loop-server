@@ -4,11 +4,11 @@ const {
 } = require('apollo-server-express');
   const { defaultFieldResolver } = require("graphql");
 
-  class RequireAuthDirective extends SchemaDirectiveVisitor {
-    visitFieldDefinition(field) {
-      const { resolve = defaultFieldResolver } = field;
-      const { role } = this.args;
-      field.resolve = async function(...args) {
+class RequireAuthDirective extends SchemaDirectiveVisitor {
+  visitFieldDefinition(field) {
+    const { resolve = defaultFieldResolver } = field;
+    const { role } = this.args;
+    field.resolve = async function(...args) {
         const [, , ctx] = args;
         if (ctx.req && ctx.req.user) {
           if (role && (!ctx.req.user.role || !ctx.req.user.role.includes(role))) {

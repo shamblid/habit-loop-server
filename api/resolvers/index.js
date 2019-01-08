@@ -12,7 +12,7 @@ const resolvers = {
 	Query: {
 		getHabit: (_, args) => habits.getHabit(args),
 		getHabits: (_, args) => habits.getHabits(args),
-		getAllHabits: (_, args) => habits.getAllHabits(),
+		getAllHabits: (_, args, { logger }) => habits.getAllHabits(_, args, logger),
 		posts: () => mockPosts,
 	},
 

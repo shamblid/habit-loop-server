@@ -61,12 +61,12 @@ class HabitResolver {
         }
     }
 
-    async getAllHabits() {
+    async getAllHabits(_, args, logger) {
         try {
             const results = await this.model.scan();
             return results.Items;
         } catch (err) {
-            console.log(err);
+            logger.error('DIZ IS NOT GUD');
         }
     }
 }
