@@ -7,17 +7,19 @@ class HabitResolver {
         this.model = new HabitModel();
     }
     
-    async getHabits(args) {
-        const {
-            user_id: userId
-        } = args;
-
+    // get all the habits for a user
+    // requires that the user_id matches the logged in user
+    // 
+    async getHabits(args, ctx) {
+        if (!ctx.user) {
+            throw new Error('Unauthorized user!');
+        }
 
         try {
-            const results = await this.model.getUserHabits(userId);
-            return results.Item;
+            const results = await this.model.getUserHabits(ctx.user.user_id);
+            return results.Items;
         } catch (err) {
-            console.log(err);
+            console.log(err)
         }
     }
 
@@ -54,7 +56,6 @@ class HabitResolver {
 
         try {
             const results = await this.model.delete(habitId, createdAt);
-            console.log(results, 'results delete');
             return results;
         } catch (err) {
             console.log(err);

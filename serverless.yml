@@ -82,6 +82,9 @@ resources:
         -
           AttributeName: created_at
           AttributeType: S
+        -
+          AttributeName: user_id
+          AttributeType: S
 
       KeySchema:
         -
@@ -94,6 +97,23 @@ resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      
+      GlobalSecondaryIndexes:
+        -
+          IndexName: UserIndex
+          KeySchema:
+            -
+              AttributeName: user_id
+              KeyType: HASH
+            -
+              AttributeName: created_at
+              KeyType: RANGE
+
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+           ReadCapacityUnits: 5
+           WriteCapacityUnits: 5
 
       TableName: habit-records
 
@@ -140,5 +160,5 @@ resources:
           ProvisionedThroughput:
            ReadCapacityUnits: 5
            WriteCapacityUnits: 5
-
+      
       TableName: user-records

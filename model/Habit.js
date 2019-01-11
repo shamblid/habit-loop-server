@@ -28,13 +28,13 @@ class Habit {
   getUserHabits(userId) {
     const params = {
       TableName: this.tableName,
-      // ExpressionAttributeValues: {
-      //   ":user_id":{
-      //     S:
-      //   }
-      // }
+      IndexName: 'UserIndex',
+      KeyConditionExpression: "user_id = :u",
+      ExpressionAttributeValues: {
+        ":u": userId
+      }
     }
-
+    
     return this.docClient.query(params).promise();
   }
 

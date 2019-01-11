@@ -1,6 +1,6 @@
 @localUrl = http://localhost:3000/graphql
 @qaUrl = https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql
-@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpay5lbWFpbEBzaWsuY29tIiwiaWF0IjoxNTQ1NzY4NjUyLCJleHAiOjE1NDU4NTUwNTJ9.QczdHUUvWN2XRVvhdN2npNtONwCQvS6r31Gd0WharSo
+@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpay5lbWFpbEBzaWsuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5IiwidXNlcl9pZCI6IjAiLCJpYXQiOjE1NDcxOTQ4NTUsImV4cCI6MTU0NzI4MTI1NX0.eilyErewe0Z-0iB2Gg5XFEQDJICcvU76ru6Rizt_mZQ
 POST {{qaUrl}}
 Content-Type: application/json
 
@@ -15,12 +15,12 @@ POST {{qaUrl}}
 Content-Type: application/json
 
 {
-    "query":"mutation {\n  createHabit(user_id: \"123\", input: {habit_id: \"321\", user_id: \"123\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
+    "query":"mutation {\n  createHabit(user_id: \"0\", input: {habit_id: \"321\", user_id: \"0\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
 }
 
 #####################################################################################################################
 # Get created habit
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
 
 {
@@ -74,3 +74,12 @@ Content-Type: application/json
 "query":"mutation {\n  login(email: \"sik.email@sik.com\", password: \"123\")\n}\n"
 }
 
+#####################################################################################################################
+# query for getting user data
+POST {{localUrl}}
+Content-Type: application/json
+Authorization: Bearer {{AuthToken}}
+
+{
+    "query":"{\n  getHabits{\n    name\n   }\n}\n"
+}

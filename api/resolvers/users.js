@@ -21,7 +21,7 @@ const resolvers = {
 
   Mutation: {
     // Handle user signup
-    async signup (_, args) {
+    async signup (_, args, { logger }) {
       try {
         const {
           id: user_id,
@@ -50,7 +50,7 @@ const resolvers = {
           { expiresIn: '1y' }
         )
       } catch (err) {
-        console.log(err);
+        logger.error(err);
       }
     },
 
@@ -69,10 +69,13 @@ const resolvers = {
       if (!valid) {
         throw new Error('Incorrect password')
       }
-
-      // return json web token
+      // payload containing user info
       return jsonwebtoken.sign(
-        { id: user.id, email: user.email },
+        { 
+          email: user.email,
+          username: user.username,
+          user_id: user.user_id,
+        },
         JWT_SECRET,
         { expiresIn: '1d' }
       )

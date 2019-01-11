@@ -4,7 +4,7 @@ const habitDefs = gql`
 
 	extend type Query {
 		getHabit(habit_id: String!, created_at: String!): Habit!
-		getHabits(user_id: String!): [Habit!]
+		getHabits: [Habit] @requireAuth(role: USER)
 		getAllHabits(user_id: String!): [Habit!] 
 	}
 	

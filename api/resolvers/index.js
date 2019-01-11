@@ -10,8 +10,8 @@ const mockPosts = [
 
 const resolvers = {
 	Query: {
-		getHabit: (_, args) => habits.getHabit(args),
-		getHabits: (_, args) => habits.getHabits(args),
+		getHabit: (_, args, ctx) => habits.getHabit(args, ctx),
+		getHabits: (_, args, ctx) => habits.getHabits(args, ctx),
 		getAllHabits: (_, args, { logger }) => habits.getAllHabits(_, args, logger),
 		posts: () => mockPosts,
 	},
