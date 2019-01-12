@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const { merge } = require('lodash');
 const habits = require('./habits');
 const users = require('./users');
 
@@ -17,9 +17,9 @@ const resolvers = {
   },
 
   Mutation: {
-    createHabit: (_, args) => habits.createHabit(args),
-    deleteHabit: (_, args) => habits.deleteHabit(args),
+    createHabit: (_, args, ctx) => habits.createHabit(args, ctx),
+    deleteHabit: (_, args, ctx) => habits.deleteHabit(args, ctx),
   },
 };
 
-module.exports = _.merge(resolvers, users);
+module.exports = merge(resolvers, users);

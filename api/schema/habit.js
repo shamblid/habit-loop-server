@@ -22,12 +22,12 @@ const habitDefs = gql`
 	}
 
 	type Habit {
-		habit_id: String!
-		user_id: String!
-		name: String!
-        type: [String!]
+		habit_id: String
+		user_id: String
+		name: String
+        type: [String]
         priority: Int
-        created_at: String!
+        created_at: String
 	}
 `;
 

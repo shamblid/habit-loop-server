@@ -1,6 +1,6 @@
 @localUrl = http://localhost:3000/graphql
 @qaUrl = https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql
-@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpay5lbWFpbEBzaWsuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5IiwidXNlcl9pZCI6IjAiLCJpYXQiOjE1NDcxOTQ4NTUsImV4cCI6MTU0NzI4MTI1NX0.eilyErewe0Z-0iB2Gg5XFEQDJICcvU76ru6Rizt_mZQ
+@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtvb2xndXlAZW1haWwuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5MTExIiwidXNlcl9pZCI6IjExMSIsInJvbGUiOlsiVVNFUiJdLCJpYXQiOjE1NDcyNjI2OTMsImV4cCI6MTU0NzM0OTA5M30.6kOpDMzoHpH76rkazwyYMHj73O0dnRQnAnZatnCQFTc
 POST {{qaUrl}}
 Content-Type: application/json
 
@@ -11,8 +11,9 @@ Content-Type: application/json
 #####################################################################################################################
 # curl -X POST -H "Content-Type:application/json" https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql --data '{"query":"mutation {\n  createHabit(user_id: \"123\", input: {habit_id: \"321\", user_id: \"123\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"}'
 # Create habit
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
+Authorization: Bearer {{AuthToken}}
 
 {
     "query":"mutation {\n  createHabit(input: {habit_id: \"321\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
@@ -58,20 +59,20 @@ Authorization: Bearer {{AuthToken}}
 
 #####################################################################################################################
 # signup test
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
 
 {
-    "query":"mutation {\n  signup(input: {id: \"0\", username: \"koolguy\", email: \"sik.email@sik.com\", password: \"123\", created_at: \"now\", role: [\"USER\"]})\n}\n"
+    "query":"mutation {\n  signup(input: {id: \"111\", username: \"koolguy111\", email: \"koolguy@email.com\", password: \"111\", created_at: \"now\"})\n}\n"
 }
 
 #####################################################################################################################
 # login test
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
 
 {
-"query":"mutation {\n  login(email: \"sik.email@sik.com\", password: \"123\")\n}\n"
+"query":"mutation {\n  login(email: \"koolguy@email.com\", password: \"111\")\n}\n"
 }
 
 #####################################################################################################################

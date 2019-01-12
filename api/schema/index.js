@@ -11,6 +11,7 @@ const typeDefs = gql`
 
 	enum Role {
 		MANAGER
+		ADMIN
 		USER
 	}	
 	

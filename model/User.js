@@ -69,7 +69,7 @@ class User {
    */
   async create(user) {
     this.validator.check(user);
-
+    console.log(user, "CREATING USER");
     const params = {
       TableName: this.tableName,
       Item: user,

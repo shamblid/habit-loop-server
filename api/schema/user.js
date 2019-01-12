@@ -7,16 +7,16 @@ const userDefs = gql`
 	}
 	
 	extend type Mutation {
-		signup(input: UserInput!): String
+		signup(input: SignupInput!): String
 		login(email: String!, password: String!): String
 	}
 
-	input UserInput {
+	input SignupInput {
+		id: String!
 		username: String!
 		password: String!
 		email: String!
 		created_at: String!
-		role: [String!]
 		manager: String
 	}
 

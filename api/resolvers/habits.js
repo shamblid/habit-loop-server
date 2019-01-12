@@ -19,11 +19,12 @@ class HabitResolver {
       const results = await this.model.getUserHabits(ctx.user.user_id);
       return results.Items;
     } catch (err) {
-      console.log(err);
+      ctx.logger.error(err);
+      throw err;
     }
   }
 
-  async getHabit(args) {
+  async getHabit(args, ctx) {
     const {
       habit_id: habitId,
       created_at: createdAt,
@@ -31,10 +32,10 @@ class HabitResolver {
 
     try {
       const results = await this.model.getHabit(habitId, createdAt);
-      console.log(results, 'getHabit');
+      ctx.logger.info(results, 'getHabit');
       return results.Item;
     } catch (err) {
-      console.log(err);
+      ctx.logger.error(err);
       throw err;
     }
   }
@@ -48,11 +49,12 @@ class HabitResolver {
       const results = await this.model.create(args.input);
       return results;
     } catch (err) {
-      console.log(err);
+      ctx.logger.log(err);
+      throw err;
     }
   }
 
-  async deleteHabit(args) {
+  async deleteHabit(args, ctx) {
     const {
       habit_id: habitId,
       created_at: createdAt,
@@ -62,12 +64,12 @@ class HabitResolver {
       const results = await this.model.delete(habitId, createdAt);
       return results;
     } catch (err) {
-      console.log(err);
+      ctx.logger.error(err);
       throw err;
     }
   }
 
-  async getAllHabits(_, args, logger) {
+  async getAllHabits(_, args, { logger }) {
     try {
       const results = await this.model.scan();
       return results.Items;

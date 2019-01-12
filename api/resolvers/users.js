@@ -32,7 +32,7 @@ const resolvers = {
         } = args.input;
 
         const model = new UserModel();
-
+        
         const user = await model.create({
           user_id,
           username,
@@ -42,14 +42,22 @@ const resolvers = {
           password: await bcrypt.hash(password, 10),
         });
 
+        logger.info('New user has been created!');
+
         // return json web token
         return jsonwebtoken.sign(
-          { id: user.id, email: user.email },
+          {
+            email: user.email,
+            username: user.username,
+            user_id: user.user_id,
+            role: user.role,
+          },
           JWT_SECRET,
           { expiresIn: '1y' },
         );
       } catch (err) {
         logger.error(err);
+        throw err;
       }
     },
 
@@ -68,12 +76,14 @@ const resolvers = {
       if (!valid) {
         throw new Error('Incorrect password');
       }
+      console.log('user', user);
       // payload containing user info
       return jsonwebtoken.sign(
         {
           email: user.email,
           username: user.username,
           user_id: user.user_id,
+          role: user.role,
         },
         JWT_SECRET,
         { expiresIn: '1d' },

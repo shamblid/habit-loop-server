@@ -8,8 +8,9 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
     const { resolve = defaultFieldResolver } = field;
     const { role } = this.args;
-    field.resolve = async function (...args) {
+    field.resolve = async (...args) => {
       const [, , ctx] = args;
+      console.log(ctx, role)
       if (ctx && ctx.user) {
         if (role && (!ctx.user.role || !ctx.user.role.includes(role))) {
           throw new AuthenticationError(
@@ -19,9 +20,6 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
           const result = await resolve.apply(this, args);
           return result;
         }
-
-        const result = await resolve.apply(this, args);
-        return result;
       }
       throw new AuthenticationError(
         'You must be signed in to view this resource.',
