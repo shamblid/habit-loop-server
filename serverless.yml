@@ -38,6 +38,7 @@ provider:
         - dynamodb:UpdateTable
       Resource: 
         - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records"
+        - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records/index/*"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records/index/*"
 

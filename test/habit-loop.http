@@ -1,6 +1,6 @@
 @localUrl = http://localhost:3000/graphql
 @qaUrl = https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql
-@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtvb2xndXlAZW1haWwuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5MTExIiwidXNlcl9pZCI6IjExMSIsInJvbGUiOlsiVVNFUiJdLCJpYXQiOjE1NDcyNjI2OTMsImV4cCI6MTU0NzM0OTA5M30.6kOpDMzoHpH76rkazwyYMHj73O0dnRQnAnZatnCQFTc
+@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtvb2xndXlAZ21haWwuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5MTEyIiwidXNlcl9pZCI6IjEiLCJyb2xlIjpbIlVTRVIiXSwiaWF0IjoxNTQ3MjYzNjgxLCJleHAiOjE1NDczNTAwODF9.VTXsW3V-qtcVZGiVz-AJViPW67THqlsz8JzBGhVVz1s
 POST {{qaUrl}}
 Content-Type: application/json
 
@@ -11,17 +11,17 @@ Content-Type: application/json
 #####################################################################################################################
 # curl -X POST -H "Content-Type:application/json" https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql --data '{"query":"mutation {\n  createHabit(user_id: \"123\", input: {habit_id: \"321\", user_id: \"123\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"}'
 # Create habit
-POST {{localUrl}}
+POST {{qaUrl}}
 Content-Type: application/json
 Authorization: Bearer {{AuthToken}}
 
 {
-    "query":"mutation {\n  createHabit(input: {habit_id: \"321\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
+    "query":"mutation {\n  createHabit(input: {habit_id: \"234234234\", created_at: \"later\", name: \"nice\", type: [\"Apollo\"]}) {\n    name\n    type\n  }\n}\n"
 }
 
 #####################################################################################################################
 # Get created habit
-POST {{localUrl}}
+POST {{qaUrl}}
 Content-Type: application/json
 
 {
@@ -59,28 +59,28 @@ Authorization: Bearer {{AuthToken}}
 
 #####################################################################################################################
 # signup test
-POST {{localUrl}}
+POST {{qaUrl}}
 Content-Type: application/json
 
 {
-    "query":"mutation {\n  signup(input: {id: \"111\", username: \"koolguy111\", email: \"koolguy@email.com\", password: \"111\", created_at: \"now\"})\n}\n"
+    "query":"mutation {\n  signup(input: {id: \"1\", username: \"koolguy112\", email: \"koolguy@gmail.com\", password: \"111\", created_at: \"now\"})\n}\n"
 }
 
 #####################################################################################################################
 # login test
-POST {{localUrl}}
+POST {{qaUrl}}
 Content-Type: application/json
 
 {
-"query":"mutation {\n  login(email: \"koolguy@email.com\", password: \"111\")\n}\n"
+"query":"mutation {\n  login(email: \"koolguy@gmail.com\", password: \"111\")\n}\n"
 }
 
 #####################################################################################################################
 # query for getting user data
-POST {{localUrl}}
+POST {{qaUrl}}
 Content-Type: application/json
 Authorization: Bearer {{AuthToken}}
 
 {
-    "query":"{\n  getHabits{\n    name\n   }\n}\n"
+    "query":"{\n  getHabits{\n    name\n   type\n}\n}\n"
 }
