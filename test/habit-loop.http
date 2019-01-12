@@ -15,7 +15,7 @@ POST {{qaUrl}}
 Content-Type: application/json
 
 {
-    "query":"mutation {\n  createHabit(user_id: \"0\", input: {habit_id: \"321\", user_id: \"0\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
+    "query":"mutation {\n  createHabit(input: {habit_id: \"321\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
 }
 
 #####################################################################################################################

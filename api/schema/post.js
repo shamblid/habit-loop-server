@@ -10,6 +10,5 @@ const postDefs = gql`
         id: Int
         title: String
     }
-`
-module.exports = postDefs
-        
+`;
+module.exports = postDefs;

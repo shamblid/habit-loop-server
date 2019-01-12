@@ -10,8 +10,8 @@ class User {
     // Might be able to remove this with servless local dynamodb plugin
     if (process.env.NODE_ENV === 'test') {
       AWS.config.update({
-          region: "us-east-1",
-          endpoint: "http://localhost:8000"
+        region: 'us-east-1',
+        endpoint: 'http://localhost:8000',
       });
     }
 
@@ -19,7 +19,7 @@ class User {
     this.validator = new UserValidator();
   }
 
-   /**
+  /**
    * Get specific User for a user
    *
    * @param { String } user_id User identification as the primary key in the dynamo table
@@ -31,10 +31,10 @@ class User {
       TableName: this.tableName,
       Key: {
         user_id,
-        created_at
-      }
-    }
-    
+        created_at,
+      },
+    };
+
     return this.docClient.get(params).promise();
   }
 
@@ -51,13 +51,13 @@ class User {
       IndexName: 'EmailIndex',
       KeyConditionExpression: '#email = :email',
       ExpressionAttributeNames: {
-        '#email': 'email'
+        '#email': 'email',
       },
       ExpressionAttributeValues: {
-        ':email': email
-      }
-    }
-    
+        ':email': email,
+      },
+    };
+
     return this.docClient.query(params).promise();
   }
 
@@ -71,8 +71,8 @@ class User {
     this.validator.check(user);
 
     const params = {
-        TableName: this.tableName,
-        Item: user
+      TableName: this.tableName,
+      Item: user,
     };
 
     return this.docClient.put(params).promise();
