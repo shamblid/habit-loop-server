@@ -6,17 +6,29 @@ const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
 const pino = require('express-pino-logger')();
 const logger = require('pino')();
+const cors = require('cors');
+const jwks = require('jwks-rsa');
+// require('dotenv').config();
 
 const app = express();
+
 
 const { typeDefs, resolvers, schemaDirectives } = require('./api');
 
 const auth = jwt({
-  secret: 'supersecret',
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: 'https://cbt-habit-loop.auth0.com/.well-known/jwks.json'
+  }),
+  audience: 'https://cbt-habit-loop/api/v1/',
+  issuer: 'https://cbt-habit-loop.auth0.com/',
+  algorithms: ['RS256'],
   credentialsRequired: false,
 });
 
-app.use(bodyParser.json(), auth, pino);
+app.use(bodyParser.json(), auth, pino, cors());
 
 const server = new ApolloServer({
   typeDefs,
@@ -27,11 +39,11 @@ const server = new ApolloServer({
     logger: req.log,
   }),
   formatResponse: (response) => {
-    logger.info(response, 'deez nuts');
+    logger.info(response);
     return response;
   },
   formatError: (error) => {
-    logger.info(error, 'deez nutsero');
+    logger.info(error);
     return error;
   },
 });

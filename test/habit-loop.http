@@ -59,7 +59,7 @@ Authorization: Bearer {{AuthToken}}
 
 #####################################################################################################################
 # signup test
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
 
 {
@@ -68,7 +68,7 @@ Content-Type: application/json
 
 #####################################################################################################################
 # login test
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
 
 {
@@ -77,7 +77,7 @@ Content-Type: application/json
 
 #####################################################################################################################
 # query for getting user data
-POST {{qaUrl}}
+POST {{localUrl}}
 Content-Type: application/json
 Authorization: Bearer {{AuthToken}}
 

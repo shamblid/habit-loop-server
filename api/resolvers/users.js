@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
 const UserModel = require('../../model/User');
 
-const JWT_SECRET = 'supersecret';
-
 const resolvers = {
   Query: {
     // fetch the profile of currently authenticated user
@@ -32,7 +30,6 @@ const resolvers = {
         } = args.input;
 
         const model = new UserModel();
-        
         const user = await model.create({
           user_id,
           username,
