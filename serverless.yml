@@ -35,9 +35,12 @@ provider:
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
+        - dynamodb:UpdateTable
       Resource: 
         - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records"
+        - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records/index/*"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records"
+        - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records/index/*"
 
 
 # you can add packaging information here
@@ -80,6 +83,9 @@ resources:
         -
           AttributeName: created_at
           AttributeType: S
+        -
+          AttributeName: user_id
+          AttributeType: S
 
       KeySchema:
         -
@@ -92,6 +98,23 @@ resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      
+      GlobalSecondaryIndexes:
+        -
+          IndexName: UserIndex
+          KeySchema:
+            -
+              AttributeName: user_id
+              KeyType: HASH
+            -
+              AttributeName: created_at
+              KeyType: RANGE
+
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+           ReadCapacityUnits: 5
+           WriteCapacityUnits: 5
 
       TableName: habit-records
 
@@ -105,6 +128,10 @@ resources:
         -
           AttributeName: created_at
           AttributeType: S
+        -
+          AttributeName: email
+          AttributeType: S
+
 
       KeySchema:
         -
@@ -134,5 +161,5 @@ resources:
           ProvisionedThroughput:
            ReadCapacityUnits: 5
            WriteCapacityUnits: 5
-
+      
       TableName: user-records

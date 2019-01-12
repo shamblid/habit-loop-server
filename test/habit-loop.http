@@ -1,6 +1,6 @@
 @localUrl = http://localhost:3000/graphql
 @qaUrl = https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql
-@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNpay5lbWFpbEBzaWsuY29tIiwiaWF0IjoxNTQ1NzIyNjQ3LCJleHAiOjE1NDU4MDkwNDd9.UtJdrJJk2xzOkxH5KBAJElP1xfW9JgeF6it3NrAsxiU
+@AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtvb2xndXlAZ21haWwuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5MTEyIiwidXNlcl9pZCI6IjEiLCJyb2xlIjpbIlVTRVIiXSwiaWF0IjoxNTQ3MjYzNjgxLCJleHAiOjE1NDczNTAwODF9.VTXsW3V-qtcVZGiVz-AJViPW67THqlsz8JzBGhVVz1s
 POST {{qaUrl}}
 Content-Type: application/json
 
@@ -13,9 +13,10 @@ Content-Type: application/json
 # Create habit
 POST {{qaUrl}}
 Content-Type: application/json
+Authorization: Bearer {{AuthToken}}
 
 {
-    "query":"mutation {\n  createHabit(user_id: \"123\", input: {habit_id: \"321\", user_id: \"123\", created_at: \"now\", name: \"LEARN GRAPHQL\", type: [\"React.js\", \"Front-end\", \"Frontend?\", \"Front end?\"]}) {\n    name\n    type\n  }\n}\n"
+    "query":"mutation {\n  createHabit(input: {habit_id: \"234234234\", created_at: \"later\", name: \"nice\", type: [\"Apollo\"]}) {\n    name\n    type\n  }\n}\n"
 }
 
 #####################################################################################################################
@@ -47,8 +48,8 @@ Content-Type: application/json
 
 
 #####################################################################################################################
-# Delete habit we first createda
-POST {{localUrl}}
+# query for getting user data
+POST {{qaUrl}}
 Content-Type: application/json
 Authorization: Bearer {{AuthToken}}
 
@@ -56,20 +57,30 @@ Authorization: Bearer {{AuthToken}}
     "query":"{\n  me {\n    user_id\n    username\n  }\n}\n"
 }
 
+#####################################################################################################################
+# signup test
+POST {{qaUrl}}
+Content-Type: application/json
 
+{
+    "query":"mutation {\n  signup(input: {id: \"1\", username: \"koolguy112\", email: \"koolguy@gmail.com\", password: \"111\", created_at: \"now\"})\n}\n"
+}
 
+#####################################################################################################################
+# login test
+POST {{qaUrl}}
+Content-Type: application/json
 
-# mutation {
-#   signup(input : {
-#     id: "0"
-# 		username: "koolguy"
-# 		email: "sik.email@sik.com"
-#     password: "123"
-# 		created_at: "now"
-#     role: ["USER"]
-#   })
-# }
+{
+"query":"mutation {\n  login(email: \"koolguy@gmail.com\", password: \"111\")\n}\n"
+}
 
-# mutation {
-#   login(email: "sik.email@sik.com", password: "123")
-# }
+#####################################################################################################################
+# query for getting user data
+POST {{qaUrl}}
+Content-Type: application/json
+Authorization: Bearer {{AuthToken}}
+
+{
+    "query":"{\n  getHabits{\n    name\n   type\n}\n}\n"
+}

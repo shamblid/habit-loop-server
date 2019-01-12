@@ -3,7 +3,7 @@ const typeDefs = require('./schema');
 const schemaDirectives = require('./directives');
 
 module.exports = {
-    resolvers,
-    typeDefs,
-    schemaDirectives,
+  resolvers,
+  typeDefs,
+  schemaDirectives,
 };

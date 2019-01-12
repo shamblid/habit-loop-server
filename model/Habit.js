@@ -10,8 +10,8 @@ class Habit {
     // Might be able to remove this with servless local dynamodb plugin
     if (process.env.NODE_ENV === 'test') {
       AWS.config.update({
-          region: "us-east-1",
-          endpoint: "http://localhost:8000"
+        region: 'us-east-1',
+        endpoint: 'http://localhost:8000',
       });
     }
 
@@ -28,17 +28,17 @@ class Habit {
   getUserHabits(userId) {
     const params = {
       TableName: this.tableName,
-      // ExpressionAttributeValues: {
-      //   ":user_id":{
-      //     S:
-      //   }
-      // }
-    }
+      IndexName: 'UserIndex',
+      KeyConditionExpression: 'user_id = :u',
+      ExpressionAttributeValues: {
+        ':u': userId,
+      },
+    };
 
     return this.docClient.query(params).promise();
   }
 
-   /**
+  /**
    * Get specific habit for a user
    *
    * @param { String } userId User identification
@@ -50,10 +50,10 @@ class Habit {
       TableName: this.tableName,
       Key: {
         habit_id: habitId,
-        created_at: createdAt
-      }
-    }
-    
+        created_at: createdAt,
+      },
+    };
+
     return this.docClient.get(params).promise();
   }
 
@@ -68,8 +68,8 @@ class Habit {
     this.validator.check(newHabit);
 
     const params = {
-        TableName: this.tableName,
-        Item: newHabit
+      TableName: this.tableName,
+      Item: newHabit,
     };
 
     return this.docClient.put(params).promise();
@@ -80,9 +80,9 @@ class Habit {
       TableName: this.tableName,
       Key: {
         habit_id: habitId,
-        created_at: createdAt
-      }
-    }
+        created_at: createdAt,
+      },
+    };
 
     return this.docClient.delete(params).promise();
   }
