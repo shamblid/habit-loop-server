@@ -1,19 +1,20 @@
-const { ApolloServer } = require("apollo-server-express");
-const express = require('express'); 
+const { ApolloServer } = require('apollo-server-express');
+const express = require('express');
 const serverless = require('serverless-http');
 const graphiql = require('graphql-playground-middleware-express').default;
 const bodyParser = require('body-parser');
-const jwt = require('express-jwt')
-const pino = require('express-pino-logger')()
+const jwt = require('express-jwt');
+const pino = require('express-pino-logger')();
 const logger = require('pino')();
+
 const app = express();
 
 const { typeDefs, resolvers, schemaDirectives } = require('./api');
 
 const auth = jwt({
   secret: 'supersecret',
-  credentialsRequired: false
-})
+  credentialsRequired: false,
+});
 
 app.use(bodyParser.json(), auth, pino);
 
@@ -25,18 +26,18 @@ const server = new ApolloServer({
     user: req.user,
     logger: req.log,
   }),
-  formatResponse: response => {
+  formatResponse: (response) => {
     logger.info(response, 'deez nuts');
     return response;
   },
-  formatError: error => {
+  formatError: (error) => {
     logger.info(error, 'deez nutsero');
     return error;
-  }
+  },
 });
 
 server.applyMiddleware({ app });
 
-app.get("/playground", graphiql({ endpoint: "/graphql" }));
+app.get('/playground', graphiql({ endpoint: '/graphql' }));
 
 module.exports.handler = serverless(app);

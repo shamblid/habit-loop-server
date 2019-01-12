@@ -35,6 +35,7 @@ class HabitResolver {
       return results.Item;
     } catch (err) {
       console.log(err);
+      throw err;
     }
   }
 
@@ -62,6 +63,7 @@ class HabitResolver {
       return results;
     } catch (err) {
       console.log(err);
+      throw err;
     }
   }
 
@@ -71,6 +73,7 @@ class HabitResolver {
       return results.Items;
     } catch (err) {
       logger.error('DIZ IS NOT GUD');
+      throw err;
     }
   }
 }
