@@ -66,6 +66,16 @@ functions:
        - http:
           path: playground
           method: get
+  pushNotifications:
+    handler: lib/pushNotifications.handler
+    events:
+      - schedule:
+          name: push-notification-handler
+          description: 'Sends push notification reminding user to train.'
+          rate: rate(10 minutes)
+      - http:
+          path: notification
+          method: get
 
 plugins:
   - serverless-offline

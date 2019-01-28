@@ -84,10 +84,24 @@ const resolvers = {
           username: user.username,
           user_id: user.user_id,
           role: user.role,
+          created_at: user.created_at,
         },
         JWT_SECRET,
         { expiresIn: '1d' },
       );
+    },
+
+    async registerPushNotification(_, { token }, { user }) {
+      const model = new UserModel();
+
+      try {
+        const results = await model.updatePushNotification(user, token);
+        console.log('added new token');
+        return results;
+      } catch (err) {
+        console.log(err);
+        return '';
+      }
     },
   },
 };

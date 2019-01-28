@@ -69,13 +69,44 @@ class User {
    */
   async create(user) {
     this.validator.check(user);
-    console.log(user, "CREATING USER");
+
     const params = {
       TableName: this.tableName,
       Item: user,
     };
 
     return this.docClient.put(params).promise();
+  }
+
+  /**
+   * Get the list of Users for a specific user
+   *
+   * @param { Object } user Object containing details of the new User
+   * @return { Array } Returns array of userUsers
+   */
+  async updatePushNotification({ user_id, created_at }, token) {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        user_id,
+        created_at,
+      },
+      UpdateExpression: 'set push_notification_token=:p',
+      ExpressionAttributeValues: {
+        ':p': token,
+      },
+      ReturnValues: 'UPDATED_NEW',
+    };
+
+    return this.docClient.update(params).promise();
+  }
+
+  async getAllUsers() {
+    const params = {
+      TableName: this.tableName,
+    };
+
+    return this.docClient.scan(params).promise();
   }
 }
 
