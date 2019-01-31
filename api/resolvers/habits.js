@@ -55,7 +55,7 @@ const resolver = {
         const generatedInput = {
           habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
-          created_at: Date.now(),
+          created_at: `${Date.now()}`,
         };
         
         const habit = _.extend(input, generatedInput);
@@ -64,7 +64,7 @@ const resolver = {
           const results = await ctx.HabitModel.create(habit);
           return results;
         } catch (err) {
-          ctx.logger.log(err);
+          ctx.logger.error(err);
           throw err;
         }
       },
