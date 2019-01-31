@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
 const pino = require('express-pino-logger')();
 const logger = require('pino')();
+const UserModel = require('./model/User');
+const HabitModel = require('./model/Habit');
 
 const app = express();
 
@@ -25,6 +27,8 @@ const server = new ApolloServer({
   context: async ({ req }) => ({
     user: req.user,
     logger: req.log,
+    HabitModel: new HabitModel(),
+    UserModel: new UserModel(),
   }),
   formatResponse: (response) => {
     logger.info(response, 'deez nuts');

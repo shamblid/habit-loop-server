@@ -12,8 +12,8 @@ const habitDefs = gql`
 		createHabit(input: HabitInput): Habit @requireAuth(role: USER)
 		deleteHabit(habit_id: String!, created_at: String!): Habit
 		addHabitForUser(user_id: String!, input: HabitInput): Habit @requireAuth(role: MANAGER)
-		updatePriority:(priority: Rank!, habit_id: String!, created_at: String!): Habit
-		updateNotification(notify: Reminder, habit_id, String!, created_at: String!): Habit
+		updatePriority(priority: Rank!, habit_id: String!, created_at: String!): Habit
+		updateNotification(notify: Reminder, habit_id: String!, created_at: String!): Habit
 	}
 
 	input HabitInput {
