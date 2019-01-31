@@ -9,6 +9,8 @@ class HabitValidator extends BaseValidator {
       created_at: 'string',
       name: 'string',
       type: 'object',
+      notify: 'object',
+      priority: 'string',
     };
 
     /**
@@ -21,6 +23,8 @@ class HabitValidator extends BaseValidator {
       'created_at',
       'name',
       'type',
+      'notify',
+      'priority',
     ];
   }
 }

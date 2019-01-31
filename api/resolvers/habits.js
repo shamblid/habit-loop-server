@@ -46,7 +46,9 @@ class HabitResolver {
     args.input.user_id = ctx.user.user_id;
 
     try {
-      const results = await this.model.create(args.input);
+      const results = await this.model.create({
+        
+      });
       return results;
     } catch (err) {
       ctx.logger.log(err);
