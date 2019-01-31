@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
+const uuid = require('uuid/v4');
+
 const UserModel = require('../../model/User');
 
 const JWT_SECRET = 'supersecret';
@@ -24,23 +26,23 @@ const resolvers = {
     async signup(_, args, { logger }) {
       try {
         const {
-          id: user_id,
           username,
           password,
           email,
-          created_at,
         } = args.input;
 
         const model = new UserModel();
-        
-        const user = await model.create({
-          user_id,
+
+        const user = {
+          user_id: uuid(),
           username,
           email,
-          created_at,
+          created_at: `${Date.now()}`,
           role: ['USER'],
           password: await bcrypt.hash(password, 10),
-        });
+        };
+
+        await model.create(user);
 
         logger.info('New user has been created!');
 
@@ -53,7 +55,7 @@ const resolvers = {
             role: user.role,
           },
           JWT_SECRET,
-          { expiresIn: '1y' },
+          { expiresIn: '1d' },
         );
       } catch (err) {
         logger.error(err);

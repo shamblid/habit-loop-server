@@ -15,8 +15,6 @@ const habitDefs = gql`
 	}
 
 	input HabitInput {
-		habit_id: String!
-		created_at: String!
 		name: String!
 		type: [String!]
 	}
