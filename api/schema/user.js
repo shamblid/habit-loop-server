@@ -13,11 +13,9 @@ const userDefs = gql`
 	} 
 
 	input SignupInput {
-		id: String!
 		username: String!
 		password: String!
 		email: String!
-		created_at: String
 		manager: String
 	}
 
