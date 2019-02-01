@@ -10,16 +10,10 @@ const mockPosts = [
 
 const resolvers = {
   Query: {
-    getHabit: (_, args, ctx) => habits.getHabit(args, ctx),
-    getHabits: (_, args, ctx) => habits.getHabits(args, ctx),
-    getAllHabits: (_, args, { logger }) => habits.getAllHabits(_, args, logger),
-    posts: () => mockPosts,
+    posts: () => mockPosts, // test query
   },
 
-  Mutation: {
-    createHabit: (_, args, ctx) => habits.createHabit(args, ctx),
-    deleteHabit: (_, args, ctx) => habits.deleteHabit(args, ctx),
-  },
+  Mutation: {},
 };
 
-module.exports = merge(resolvers, users);
+module.exports = merge(resolvers, users, habits);

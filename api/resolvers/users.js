@@ -1,46 +1,45 @@
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
-const UserModel = require('../../model/User');
+const uuid = require('uuid/v4');
+const _ = require('lodash');
 
 const JWT_SECRET = 'supersecret';
 
 const resolvers = {
   Query: {
     // fetch the profile of currently authenticated user
-    async me(_, args, { user }) {
+    async me(instance, args, { user, UserModel }) {
       // make sure user is logged in
       if (!user) {
         throw new Error('You are not authenticated!');
       }
 
       // user is authenticated
-      const model = new UserModel();
-      const result = await model.getByEmail(user.email);
-      return result.Items[0];
+      
+      const result = await UserModel.getByEmail(user.email);
+      return _.get(result, 'Items[0]');
     },
   },
   Mutation: {
     // Handle user signup
-    async signup(_, args, { logger }) {
+    async signup(instance, args, { logger, UserModel }) {
       try {
         const {
-          id: user_id,
           username,
           password,
           email,
-          created_at,
         } = args.input;
 
-        const model = new UserModel();
-        
-        const user = await model.create({
-          user_id,
+        const user = {
+          user_id: uuid(),
           username,
           email,
-          created_at,
+          created_at: `${Date.now()}`,
           role: ['USER'],
           password: await bcrypt.hash(password, 10),
-        });
+        };
+
+        await UserModel.create(user);
 
         logger.info('New user has been created!');
 
@@ -53,7 +52,7 @@ const resolvers = {
             role: user.role,
           },
           JWT_SECRET,
-          { expiresIn: '1y' },
+          { expiresIn: '1d' },
         );
       } catch (err) {
         logger.error(err);
@@ -62,10 +61,16 @@ const resolvers = {
     },
 
     // Handles user login
-    async login(_, { email, password }) {
-      const model = new UserModel();
-      const results = await model.getByEmail(email);
-      const user = results.Items[0];
+    async login(instance, { email, password }, ctx) {
+      const { UserModel, logger } = ctx;
+      let user; 
+
+      try {
+        const results = await UserModel.getByEmail(email);
+        user = _.get(results, 'Items[0]');
+      } catch (error) {
+        logger.error('USER_LOGIN_ERROR', error);
+      }
 
       if (!user) {
         throw new Error('No user with that email');
@@ -76,7 +81,7 @@ const resolvers = {
       if (!valid) {
         throw new Error('Incorrect password');
       }
-      console.log('user', user);
+
       // payload containing user info
       return jsonwebtoken.sign(
         {
@@ -84,10 +89,22 @@ const resolvers = {
           username: user.username,
           user_id: user.user_id,
           role: user.role,
+          created_at: user.created_at,
         },
         JWT_SECRET,
         { expiresIn: '1d' },
       );
+    },
+
+    async registerPushNotification(instance, { token }, { user, UserModel, logger }) {
+      try {
+        const results = await UserModel.updatePushNotification(user, token);
+        logger.info('added new token');
+        return results;
+      } catch (err) {
+        logger.error('REGISTER_PUSH_NOTIFICATION_ERROR', err);
+        return '';
+      }
     },
   },
 };

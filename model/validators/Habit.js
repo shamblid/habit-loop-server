@@ -9,18 +9,22 @@ class HabitValidator extends BaseValidator {
       created_at: 'string',
       name: 'string',
       type: 'object',
+      notify: 'object',
+      priority: 'string',
     };
 
     /**
-         * Fields allowed during Creation
-         * State is interpreted by creation, since we're creating it was present and therefore active.
-         * */
+     * Fields allowed during Creation
+     * State is interpreted by creation, since we're creating it was present and therefore active.
+     * */
     this.ALLOWED_PARAMS = [
       'habit_id',
       'user_id',
       'created_at',
       'name',
       'type',
+      'notify',
+      'priority',
     ];
   }
 }
