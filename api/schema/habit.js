@@ -30,14 +30,7 @@ const habitDefs = gql`
 		created_at: String
 		notify: Reminder
 	}
-
-	enum Reminder {
-		MORNING
-		NOON
-		EVENING
-		NIGHT
-	}
-
+	
 	enum Rank {
 		TOP
 		MIDDLE

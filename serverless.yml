@@ -141,6 +141,12 @@ resources:
         -
           AttributeName: email
           AttributeType: S
+        -
+          AttributeName: token
+          AttributeType: S
+        -
+          AttributeName: reminder
+          AttributeType: S
 
 
       KeySchema:
@@ -164,6 +170,22 @@ resources:
               KeyType: HASH
             -
               AttributeName: created_at
+              KeyType: RANGE
+
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+           ReadCapacityUnits: 5
+           WriteCapacityUnits: 5
+        
+        -
+          IndexName: NotificationIndex
+          KeySchema:
+            -
+              AttributeName: token
+              KeyType: HASH
+            -
+              AttributeName: reminder
               KeyType: RANGE
 
           Projection:
