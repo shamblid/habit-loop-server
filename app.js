@@ -5,14 +5,9 @@ const graphiql = require('graphql-playground-middleware-express').default;
 const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
 const pino = require('express-pino-logger')();
-const logger = require('pino')();
-const UserModel = require('./model/User');
-const HabitModel = require('./model/Habit');
+const api = require('./api');
 
 const app = express();
-
-const { typeDefs, resolvers, schemaDirectives } = require('./api');
-
 const auth = jwt({
   secret: 'supersecret',
   credentialsRequired: false,
@@ -20,25 +15,7 @@ const auth = jwt({
 
 app.use(bodyParser.json(), auth, pino);
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  schemaDirectives,
-  context: async ({ req }) => ({
-    user: req.user,
-    logger: req.log,
-    HabitModel: new HabitModel(),
-    UserModel: new UserModel(),
-  }),
-  formatResponse: (response) => {
-    logger.info(response, 'deez nuts');
-    return response;
-  },
-  formatError: (error) => {
-    logger.info(error, 'deez nutsero');
-    return error;
-  },
-});
+const server = new ApolloServer(api);
 
 server.applyMiddleware({ app });
 

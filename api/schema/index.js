@@ -14,6 +14,13 @@ const typeDefs = gql`
 		ADMIN
 		USER
 	}	
+
+	enum Reminder {
+		MORNING
+		NOON
+		AFTERNOON
+		EVENING
+	}
 	
 	type Query {
         _empty: String
