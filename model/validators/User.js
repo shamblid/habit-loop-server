@@ -10,8 +10,9 @@ class UserValidator extends BaseValidator {
       password: 'string',
       created_at: 'string',
       role: 'object',
-      token: 'string',
+      push_token: 'string',
       timestamp: 'string',
+      reminder: 'string',
     };
 
     /**
@@ -25,8 +26,9 @@ class UserValidator extends BaseValidator {
       'password',
       'created_at',
       'role',
-      'token',
+      'push_token',
       'timestamp',
+      'reminder',
     ];
   }
 }

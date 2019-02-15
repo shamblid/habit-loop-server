@@ -84,17 +84,17 @@ class User {
    * @param { Object } user Object containing details of the new User
    * @return { Array } Returns array of userUsers
    */
-  updatePushNotification({ user_id, created_at }, token, reminder = 'MORNING') {
+  updatePushNotification({ user_id, created_at }, push_token, reminder = 'MORNING') {
     const params = {
       TableName: this.tableName,
-      IndexName: 'NotificationIndex',
+      IndexName: 'PushNotificationIndex',
       Key: {
         user_id,
         created_at,
       },
-      UpdateExpression: 'set token=:p',
+      UpdateExpression: 'set push_token=:p, reminder=:r',
       ExpressionAttributeValues: {
-        ':p': token,
+        ':p': push_token,
         ':r': reminder,
       },
       ReturnValues: 'UPDATED_NEW',

@@ -26,7 +26,7 @@ const userDefs = gql`
 		created_at: String
 		role: [String]
 		manager: String
-    }
+	}
 `;
 
 module.exports = userDefs;
