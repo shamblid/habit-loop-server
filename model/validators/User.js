@@ -10,12 +10,15 @@ class UserValidator extends BaseValidator {
       password: 'string',
       created_at: 'string',
       role: 'object',
+      push_token: 'string',
+      timestamp: 'string',
+      reminder: 'string',
     };
 
     /**
-         * Fields allowed during Creation
-         * State is interpreted by creation, since we're creating it was present and therefore active.
-         * */
+     * Fields allowed during Creation
+     * State is interpreted by creation, since we're creating it was present and therefore active.
+     * */
     this.ALLOWED_PARAMS = [
       'user_id',
       'username',
@@ -23,6 +26,9 @@ class UserValidator extends BaseValidator {
       'password',
       'created_at',
       'role',
+      'push_token',
+      'timestamp',
+      'reminder',
     ];
   }
 }

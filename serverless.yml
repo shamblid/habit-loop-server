@@ -142,7 +142,7 @@ resources:
           AttributeName: email
           AttributeType: S
         -
-          AttributeName: token
+          AttributeName: push_token
           AttributeType: S
         -
           AttributeName: reminder
@@ -177,17 +177,16 @@ resources:
           ProvisionedThroughput:
            ReadCapacityUnits: 5
            WriteCapacityUnits: 5
-        
+
         -
-          IndexName: NotificationIndex
+          IndexName: PushNotificationIndex
           KeySchema:
             -
-              AttributeName: token
+              AttributeName: push_token
               KeyType: HASH
             -
               AttributeName: reminder
-              KeyType: RANGE
-
+              KeyType: RANGE      
           Projection:
             ProjectionType: ALL
           ProvisionedThroughput:

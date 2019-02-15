@@ -2,8 +2,8 @@ const logger = require('pino')();
 const resolvers = require('./resolvers');
 const typeDefs = require('./schema');
 const schemaDirectives = require('./directives');
-const UserModel = require('../model/User');
-const HabitModel = require('../model/Habit');
+const UserModel = require('@userModel');
+const HabitModel = require('@habitModel');
 
 module.exports = {
   resolvers,
