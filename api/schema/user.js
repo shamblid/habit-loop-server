@@ -9,7 +9,7 @@ const userDefs = gql`
 	extend type Mutation {
 		signup(input: SignupInput!): String
 		login(email: String!, password: String!): String
-		registerPushNotification(user_id: String!, created_at: String!, token: String!): String @requireAuth(role: USER)
+		registerPushNotification(token: String! reminder: Reminder): String @requireAuth(role: USER)
 	} 
 
 	input SignupInput {

@@ -84,16 +84,18 @@ class User {
    * @param { Object } user Object containing details of the new User
    * @return { Array } Returns array of userUsers
    */
-  async updatePushNotification({ user_id, created_at }, token) {
+  updatePushNotification({ user_id, created_at }, token, reminder = 'MORNING') {
     const params = {
       TableName: this.tableName,
+      IndexName: 'NotificationIndex',
       Key: {
         user_id,
         created_at,
       },
-      UpdateExpression: 'set push_notification_token=:p',
+      UpdateExpression: 'set token=:p',
       ExpressionAttributeValues: {
         ':p': token,
+        ':r': reminder,
       },
       ReturnValues: 'UPDATED_NEW',
     };
@@ -107,6 +109,23 @@ class User {
     };
 
     return this.docClient.scan(params).promise();
+  }
+
+  setPushNotification({ user_id, created_at }, set) {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        user_id,
+        created_at,
+      },
+      UpdateExpression: 'set push_notification_enabled=:p',
+      ExpressionAttributevalues: {
+        ':p': set,
+      },
+      ReturnValues: 'UPDATED_NEW',
+    }
+
+    return this.docClient.update(params).promise();
   }
 }
 

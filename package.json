@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "set NODE_ENV=test&& node app.js",
-    "test": "export NODE_ENV=test && export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha"
+    "test": "export NODE_ENV=test && export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha",
+    "postinstall": "link-module-alias"
   },
   "keywords": [],
   "author": "",
@@ -34,10 +35,16 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "graphql-tools": "^4.0.3",
+    "link-module-alias": "^1.1.6",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
     "serverless-offline": "^3.31.3",
     "sinon": "^7.1.1",
     "supertest": "^3.3.0"
+  },
+  "_moduleAliases": {
+    "@lib": "lib",
+    "@userModel": "model/User.js",
+    "@habitModel": "model/Habit.js"
   }
 }
