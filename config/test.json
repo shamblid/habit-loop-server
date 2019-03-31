@@ -2,7 +2,9 @@
     "dynamodb": {
         "habitTable": "habit-records",
         "userTable": "user-records",
+        "region": "localhost",
         "endpoint": "http://localhost:8000",
-        "region": "us-foo-1"
+        "accessKeyId": "DEFAULT_ACCESS_KEY",  // needed if you dont have aws credentials at all in env
+        "secretAccessKey": "DEFAULT_SECRET"
     }
 }

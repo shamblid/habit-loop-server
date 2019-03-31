@@ -20,6 +20,7 @@ const resolvers = {
       return _.get(result, 'Items[0]');
     },
   },
+  
   Mutation: {
     // Handle user signup
     async signup(instance, args, { logger, UserModel }) {

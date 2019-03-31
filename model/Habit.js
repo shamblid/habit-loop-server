@@ -87,6 +87,15 @@ class Habit {
     return this.docClient.delete(params).promise();
   }
 
+  async update(habit) {
+    const params = {
+      TableName: this.tableName,
+      Item: Habit,
+    };
+
+    return this.docClient.update(params).promise();
+  }
+
   async scan() {
     const params = {
       TableName: this.tableName,

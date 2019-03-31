@@ -39,7 +39,7 @@ const resolver = {
           const results = await HabitModel.scan();
           return results.Items;
         } catch (err) {
-          logger.error('DIZ IS NOT GUD');
+          logger.error('Error getting all habits.');
           throw err;
         }
       },
@@ -77,6 +77,18 @@ const resolver = {
     
         try {
           const results = await ctx.HabitModel.delete(habitId, createdAt);
+          return results;
+        } catch (err) {
+          ctx.logger.error(err);
+          throw err;
+        }
+      },
+
+      async updateHabit(instance, args, ctx) {
+        const input = _.get(args, 'input');
+  
+        try {
+          const results = await ctx.HabitModel.update(input);
           return results;
         } catch (err) {
           ctx.logger.error(err);
