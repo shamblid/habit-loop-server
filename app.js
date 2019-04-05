@@ -4,7 +4,9 @@ const serverless = require('serverless-http');
 const graphiql = require('graphql-playground-middleware-express').default;
 const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
-const pino = require('express-pino-logger')();
+const pino = require('express-pino-logger')({
+  prettyPrint: true,
+});
 const api = require('./api');
 
 const app = express();

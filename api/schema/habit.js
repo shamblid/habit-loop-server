@@ -19,13 +19,13 @@ const habitDefs = gql`
 
 	input HabitInput {
 		name: String!
-		type: [String!]
+		type: String
 	}
 
 	input UpdateHabitInput {
 		habit_id: String!
-		user_id: String!
 		created_at: String!
+		user_id: String
 		name: String
 		type: String
 	}	
@@ -34,7 +34,7 @@ const habitDefs = gql`
 		habit_id: String
 		user_id: String
 		name: String
-        type: [String]
+        type: String
         priority: Rank
 		created_at: String
 		notify: Reminder

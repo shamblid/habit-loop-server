@@ -39,6 +39,7 @@
     "link-module-alias": "^1.1.6",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
+    "pino-pretty": "^2.6.0",
     "serverless-offline": "^3.31.3",
     "sinon": "^7.1.1",
     "supertest": "^3.3.0"
