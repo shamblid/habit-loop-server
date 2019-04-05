@@ -16,7 +16,7 @@ Content-Type: application/json
 Authorization: Bearer {{AuthToken}}
 
 {
-    "query":"mutation {\n  createHabit(input: {habit_id: \"234234234\", created_at: \"later\", name: \"nice\", type: [\"Apollo\"]}) {\n    name\n    type\n  }\n}\n"
+    "query":"mutation {\n  createHabit(input: {habit_id: \"234234234\", created_at: \"later\", name: \"nice\", type: \"Apollo\"}) {\n    name\n    type\n  }\n}\n"
 }
 
 #####################################################################################################################

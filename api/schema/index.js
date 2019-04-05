@@ -1,10 +1,8 @@
 const { gql } = require('apollo-server-express');
 const habitDefs = require('./habit');
 const userDefs = require('./user');
-const postDefs = require('./post');
 
 const typeDefs = gql`
-
 	directive @requireAuth(
 		role: Role
 	) on FIELD_DEFINITION
@@ -27,11 +25,10 @@ const typeDefs = gql`
 	}
     
     type Mutation {
-        _empty: String
+		_empty: String
     }
     
     ${habitDefs}
-    ${postDefs}
     ${userDefs}
 `;
 

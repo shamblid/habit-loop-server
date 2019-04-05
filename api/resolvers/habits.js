@@ -39,7 +39,7 @@ const resolver = {
           const results = await HabitModel.scan();
           return results.Items;
         } catch (err) {
-          logger.error('DIZ IS NOT GUD');
+          logger.error('Error getting all habits.');
           throw err;
         }
       },
@@ -77,6 +77,23 @@ const resolver = {
     
         try {
           const results = await ctx.HabitModel.delete(habitId, createdAt);
+          return results;
+        } catch (err) {
+          ctx.logger.error(err);
+          throw err;
+        }
+      },
+
+      async updateHabit(instance, args, ctx) {
+        const input = _.get(args, 'input');
+
+        // User trying to make changes for habits that they do not own.
+        // if (input.user_id !== ctx.user.user_id) {
+        //   throw new Error('ERROR_403_FORBIDDEN');
+        // }
+
+        try {
+          const results = await ctx.HabitModel.update(input);
           return results;
         } catch (err) {
           ctx.logger.error(err);

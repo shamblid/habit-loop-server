@@ -67,7 +67,7 @@ class User {
    * @param { Object } user Object containing details of the new User
    * @return { Array } Returns array of userUsers
    */
-  async create(user) {
+  create(user) {
     this.validator.check(user);
 
     const params = {
@@ -103,7 +103,7 @@ class User {
     return this.docClient.update(params).promise();
   }
 
-  async getAllUsers() {
+  getAllUsers() {
     const params = {
       TableName: this.tableName,
     };
@@ -123,7 +123,7 @@ class User {
         ':p': set,
       },
       ReturnValues: 'UPDATED_NEW',
-    }
+    };
 
     return this.docClient.update(params).promise();
   }

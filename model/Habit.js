@@ -1,5 +1,31 @@
 const AWS = require('aws-sdk');
+const _ = require('lodash');
+const logger = require('pino')();
 const HabitValidator = require('./validators/Habit');
+
+// item contains name, type, habit_id, user_id, created_at
+const createUpdate = (item) => {
+  const updateTypes = ['name', 'type'];
+  const types = _.pick(item, updateTypes);
+
+  const ExpressionAttributeNames = {};
+  _.forEach(types, (val, key) => {
+    ExpressionAttributeNames[`#${key}123`] = key;
+  });
+
+  const expression = _.map(types, (val, key) => `#${key}123 = :val${key}`);
+  
+  const ExpressionAttributeValues = {};
+  
+  _.forEach(types, (val, key) => {
+    ExpressionAttributeValues[`:val${key}`] = val;
+  });
+
+  const UpdateExpression = `set ${expression}`;
+
+
+  return [UpdateExpression, ExpressionAttributeValues, ExpressionAttributeNames];
+};
 
 class Habit {
   constructor() {
@@ -15,6 +41,8 @@ class Habit {
       });
     }
 
+
+    this.logger = logger;
     this.docClient = new AWS.DynamoDB.DocumentClient();
     this.validator = new HabitValidator();
   }
@@ -85,6 +113,29 @@ class Habit {
     };
 
     return this.docClient.delete(params).promise();
+  }
+
+  async update(habit) {
+    const [
+      UpdateExpression, 
+      ExpressionAttributeValues, 
+      ExpressionAttributeNames,
+    ] = createUpdate(habit);
+    
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        habit_id: habit.habit_id,
+        created_at: habit.created_at,
+      },
+      UpdateExpression,
+      ExpressionAttributeValues,
+      ExpressionAttributeNames,
+      Item: habit,
+      ReturnValue: 'UPDATED_NEW',
+    };
+
+    return this.docClient.update(params).promise();
   }
 
   async scan() {
