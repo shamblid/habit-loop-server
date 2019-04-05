@@ -1,8 +1,6 @@
 const AWS = require('aws-sdk');
 const _ = require('lodash');
-const logger = require('pino')({
-  prettyPrint: true,
-});
+const logger = require('pino')();
 const HabitValidator = require('./validators/Habit');
 
 // item contains name, type, habit_id, user_id, created_at

@@ -1,6 +1,4 @@
-const logger = require('pino')({
-  prettyPrint: true,
-});
+const logger = require('pino')();
 const resolvers = require('./resolvers');
 const typeDefs = require('./schema');
 const schemaDirectives = require('./directives');

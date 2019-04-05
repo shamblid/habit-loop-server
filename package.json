@@ -14,7 +14,7 @@
   "dependencies": {
     "apollo-server-express": "^2.3.1",
     "aws-sdk": "^2.361.0",
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
     "expo-server-sdk": "^3.1.0",
     "express": "^4.16.4",
