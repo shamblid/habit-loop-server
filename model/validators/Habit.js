@@ -11,6 +11,8 @@ class HabitValidator extends BaseValidator {
       type: 'object',
       notify: 'object',
       priority: 'string',
+      completed_today: 'boolean',
+      recurrence: 'string',
     };
 
     /**
@@ -25,6 +27,8 @@ class HabitValidator extends BaseValidator {
       'type',
       'notify',
       'priority',
+      'completed_today',
+      'recurrence',
     ];
   }
 }

@@ -56,6 +56,7 @@ const resolver = {
           habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
           created_at: `${Date.now()}`,
+          completed_today: false,
         };
         
         const habit = _.extend(input, generatedInput);
