@@ -56,6 +56,7 @@ const resolver = {
           habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
           created_at: `${Date.now()}`,
+          completed_today: false,
         };
         
         const habit = _.extend(input, generatedInput);
@@ -86,7 +87,7 @@ const resolver = {
 
       async updateHabit(instance, args, ctx) {
         const input = _.get(args, 'input');
-
+        console.log(input, 'help')
         // User trying to make changes for habits that they do not own.
         // if (input.user_id !== ctx.user.user_id) {
         //   throw new Error('ERROR_403_FORBIDDEN');

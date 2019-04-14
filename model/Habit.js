@@ -5,7 +5,8 @@ const HabitValidator = require('./validators/Habit');
 
 // item contains name, type, habit_id, user_id, created_at
 const createUpdate = (item) => {
-  const updateTypes = ['name', 'type'];
+  const updateTypes = ['name', 'type', 'recurrence'];
+  console.log(item);
   const types = _.pick(item, updateTypes);
 
   const ExpressionAttributeNames = {};
@@ -23,7 +24,7 @@ const createUpdate = (item) => {
 
   const UpdateExpression = `set ${expression}`;
 
-
+  console.log(UpdateExpression, ExpressionAttributeNames, ExpressionAttributeValues);
   return [UpdateExpression, ExpressionAttributeValues, ExpressionAttributeNames];
 };
 

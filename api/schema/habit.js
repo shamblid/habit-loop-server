@@ -20,6 +20,7 @@ const habitDefs = gql`
 	input HabitInput {
 		name: String!
 		type: String
+		recurrence: Recurrence
 	}
 
 	input UpdateHabitInput {
@@ -28,6 +29,7 @@ const habitDefs = gql`
 		user_id: String
 		name: String
 		type: String
+		recurrence: Recurrence
 	}	
 
 	type Habit {
@@ -38,6 +40,13 @@ const habitDefs = gql`
         priority: Rank
 		created_at: String
 		notify: Reminder
+		completed_today: Boolean
+		recurrence: Recurrence
+	}
+
+	enum Recurrence {
+		DAILY
+		WEEKLY
 	}
 	
 	enum Rank {
