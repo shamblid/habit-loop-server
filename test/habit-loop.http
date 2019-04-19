@@ -1,5 +1,5 @@
 @localUrl = http://localhost:3000/graphql
-@qaUrl = https://o6b8ejudj2.execute-api.us-east-1.amazonaws.com/dev/graphql
+@qaUrl = https://klr9esc4a5.execute-api.us-east-1.amazonaws.com/dev/graphql
 @AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtvb2xndXlAZ21haWwuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5MTEyIiwidXNlcl9pZCI6IjEiLCJyb2xlIjpbIlVTRVIiXSwiaWF0IjoxNTQ3MjYzNjgxLCJleHAiOjE1NDczNTAwODF9.VTXsW3V-qtcVZGiVz-AJViPW67THqlsz8JzBGhVVz1s
 POST {{qaUrl}}
 Content-Type: application/json
@@ -72,7 +72,7 @@ POST {{qaUrl}}
 Content-Type: application/json
 
 {
-"query":"mutation {\n  login(email: \"koolguy@gmail.com\", password: \"111\")\n}\n"
+    "query":"mutation {\n  login(email: \"email@email.com\", password: \"12345678\")\n}\n"
 }
 
 #####################################################################################################################
