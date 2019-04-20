@@ -9,7 +9,8 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV}
     REDIS_HOST:
-      "Fn::Join": [":", ["Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Port]]]  iamRoleStatements:
+      "Fn::Join": [":", ["Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Port]]]
+  iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
