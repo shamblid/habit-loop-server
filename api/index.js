@@ -16,7 +16,7 @@ module.exports = {
     logger: req.log,
     HabitModel: new HabitModel(),
     UserModel: new UserModel(),
-    Redis: new Redis(6379, process.env.REDIS_HOST),
+    Redis: new Redis(6379, 'hab-se-1k2zu9rnvuwwl.p9n4qp.0001.use1.cache.amazonaws.com'),
   }),
   formatResponse: (response) => {
     logger.info(response);
