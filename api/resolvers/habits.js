@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const uuidv4 = require('uuid/v4');
+const moment = require('moment');
 
 const resolver = {
     Query: {
@@ -13,7 +14,19 @@ const resolver = {
 
         try {
           const results = await ctx.HabitModel.getUserHabits(ctx.user.user_id);
-          return results.Items;
+          const completedDailyHabits = await ctx.Redis.lrange(`${ctx.user.user_id}|DAILY`);
+          const completedWeeklyHabits = await ctx.Redis.lrange(`${ctx.user.user_id}|WEEKLY`);
+
+          const habits = results.Items;
+
+          const newHabits = _.map(habits, habit => {
+              if (completedDailyHabits.includes(habit.habit_id) 
+              || completedWeeklyHabits.includes(habit.habit_id)) {
+                return Object.assign(habit, { completed_today: true });
+              } return habit;
+          });
+
+          return newHabits;
         } catch (err) {
           ctx.logger.error(err);
           throw err;
@@ -56,7 +69,6 @@ const resolver = {
           habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
           created_at: `${Date.now()}`,
-          completed_today: false,
         };
         
         const habit = _.extend(input, generatedInput);
@@ -99,6 +111,19 @@ const resolver = {
         } catch (err) {
           ctx.logger.error(err);
           throw err;
+        }
+      },
+
+      async completeHabit(instance, { user_id, habit_id, recurrence }, ctx) {
+        if (recurrence === 'DAILY') {
+          ctx.Redis.rpush(`${user_id}|DAILY`, habit_id);
+    
+          ctx.Redis.expire(`${user_id}|DAILY`, moment().endOf('day').unix());
+        } else if (recurrence === 'WEEKLY') {
+          ctx.Redis.rpush(`${user_id}|WEEKLY`, habit_id);
+    
+          // first day of week according to iso is monday
+          ctx.Redis.expire(`${user_id}|WEEKLY`, moment().endOf('isoWeek').unix());
         }
       },
     },

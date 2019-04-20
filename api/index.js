@@ -1,4 +1,6 @@
 const logger = require('pino')();
+const Redis = require('ioredis');
+
 const resolvers = require('./resolvers');
 const typeDefs = require('./schema');
 const schemaDirectives = require('./directives');
@@ -14,6 +16,7 @@ module.exports = {
     logger: req.log,
     HabitModel: new HabitModel(),
     UserModel: new UserModel(),
+    Redis: new Redis(6379, process.env.REDIS_HOST),
   }),
   formatResponse: (response) => {
     logger.info(response);
