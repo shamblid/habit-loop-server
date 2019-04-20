@@ -185,67 +185,67 @@ resources:
       Type: AWS::EC2::VPC
       Properties:
         CidrBlock: "10.0.0.0/16"
-    ServerlessSubnetA:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: ServerlessVPC
-        AvailabilityZone: ${self:provider.region}a
-        CidrBlock: "10.0.0.0/24"
-    ServerlessSubnetB:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: ServerlessVPC
-        AvailabilityZone: ${self:provider.region}c
-        CidrBlock: "10.0.1.0/24"
-    ServerlessSubnetC:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: ServerlessVPC
-        AvailabilityZone: ${self:provider.region}d
-        CidrBlock: "10.0.2.0/24"
-    ServerlessSecurityGroup:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: SecurityGroup for Serverless Functions
-        VpcId:
-          Ref: ServerlessVPC
-    ServerlessStorageSecurityGroup:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: Ingress for Redis Cluster
-        VpcId:
-          Ref: ServerlessVPC
-        SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '6379'
-          ToPort: '6379'
-          SourceSecurityGroupId:
-            Ref: ServerlessSecurityGroup
-    ServerlessElasticacheSubnetGroup:
-      Type: AWS::ElastiCache::SubnetGroup
-      Properties:
-        Description: "Cache Subnet Group"
-        SubnetIds:
-        - Ref: ServerlessSubnetA
-        - Ref: ServerlessSubnetB
-        - Ref: ServerlessSubnetC
-    ServerlessElasticacheCluster:
-      DependsOn: ServerlessStorageSecurityGroup
-      Type: AWS::ElastiCache::CacheCluster
-      Properties:
-        AutoMinorVersionUpgrade: true
-        Engine: redis
-        CacheNodeType: cache.t1.micro
-        NumCacheNodes: 1
-        VpcSecurityGroupIds:
-        - "Fn::GetAtt": ServerlessStorageSecurityGroup.GroupId
-        CacheSubnetGroupName:
-          Ref: ServerlessElasticacheSubnetGroup
+  ServerlessSubnetA:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}a
+      CidrBlock: "10.0.0.0/24"
+  ServerlessSubnetB:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}c
+      CidrBlock: "10.0.1.0/24"
+  ServerlessSubnetC:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}d
+      CidrBlock: "10.0.2.0/24"
+  ServerlessSecurityGroup:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SecurityGroup for Serverless Functions
+      VpcId:
+        Ref: ServerlessVPC
+  ServerlessStorageSecurityGroup:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Ingress for Redis Cluster
+      VpcId:
+        Ref: ServerlessVPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '6379'
+        ToPort: '6379'
+        SourceSecurityGroupId:
+          Ref: ServerlessSecurityGroup
+  ServerlessElasticacheSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: "Cache Subnet Group"
+      SubnetIds:
+      - Ref: ServerlessSubnetA
+      - Ref: ServerlessSubnetB
+      - Ref: ServerlessSubnetC
+  ServerlessElasticacheCluster:
+    DependsOn: ServerlessStorageSecurityGroup
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      AutoMinorVersionUpgrade: true
+      Engine: redis
+      CacheNodeType: cache.t1.micro
+      NumCacheNodes: 1
+      VpcSecurityGroupIds:
+      - "Fn::GetAtt": ServerlessStorageSecurityGroup.GroupId
+      CacheSubnetGroupName:
+        Ref: ServerlessElasticacheSubnetGroup
