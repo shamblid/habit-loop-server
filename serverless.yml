@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   profile: serverless
-  stage: dev-test-redis
+  stage: dev
   region: us-east-1
   environment:
     NODE_ENV: ${env:NODE_ENV}
@@ -110,7 +110,7 @@ resources:
            ReadCapacityUnits: 5
            WriteCapacityUnits: 5
 
-      TableName: habit-records-${self:provider.environment.NODE_ENV}
+      TableName: habit-records
 
   UserDynamoDBTable:
     Type: "AWS::DynamoDB::Table"
@@ -177,7 +177,7 @@ resources:
            ReadCapacityUnits: 5
            WriteCapacityUnits: 5
       
-      TableName: user-records-${self:provider.environment.NODE_ENV}
+      TableName: user-records
 
   VPC:
       Type: AWS::EC2::VPC
