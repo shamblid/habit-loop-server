@@ -9,7 +9,7 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV}
     REDIS_HOST:
-      "Fn::Join": [":", ["Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Address], "Fn::GetAtt": [ServerlessElasticacheCluster, ConfigurationEndpoint.Port]]]
+      "Fn::Join": [":", ["Fn::GetAtt": [ServerlessElasticacheCluster, RedisEndpoint.Address], "Fn::GetAtt": [ServerlessElasticacheCluster, RedisEndpoint.Port]]]
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -25,15 +25,19 @@ provider:
         - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records/index/*"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records/index/*"
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
         - ec2:CreateNetworkInterface
         - ec2:DescribeNetworkInterfaces
         - ec2:DeleteNetworkInterface
       Resource: "*"
-
+    - Effect: Allow
+      Action:
+        - iam:CreateServiceLinkedRole
+      Resource: 
+        - arn:aws:iam::*:role/aws-service-role/elasticache.amazonaws.com/AWSServiceRoleForElastiCache
 functions:
-  grahpql:
+  graphql:
     handler: app.handler
     events:
       - http:
@@ -63,6 +67,13 @@ functions:
       - http:
           path: notification
           method: get
+    vpc:
+      securityGroupIds:
+        - "Fn::GetAtt": ServerlessSecurityGroup.GroupId
+      subnetIds:
+        - Ref: ServerlessSubnetA
+        - Ref: ServerlessSubnetB
+        - Ref: ServerlessSubnetC
 
 plugins:
   - serverless-offline
