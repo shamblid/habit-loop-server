@@ -33,7 +33,7 @@ provider:
       Resource: "*"
 
 functions:
-  grahpql:
+  graphql:
     handler: app.handler
     events:
       - http:

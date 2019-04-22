@@ -12,25 +12,31 @@ const resolver = {
           throw new Error('Unauthorized user!');
         }
 
+        let habits;
+
         try {
           const results = await ctx.HabitModel.getUserHabits(ctx.user.user_id);
-          const completedDailyHabits = await ctx.Redis.lrange(`${ctx.user.user_id}|DAILY`);
-          const completedWeeklyHabits = await ctx.Redis.lrange(`${ctx.user.user_id}|WEEKLY`);
-
-          const habits = results.Items;
-
-          const newHabits = _.map(habits, habit => {
-              if (completedDailyHabits.includes(habit.habit_id) 
-              || completedWeeklyHabits.includes(habit.habit_id)) {
-                return Object.assign(habit, { completed_today: true });
-              } return habit;
-          });
-
-          return newHabits;
+          habits = results.Items;
         } catch (err) {
           ctx.logger.error(err);
           throw err;
         }
+
+        try {
+          const completedDailyHabits = await ctx.Redis.lrange(`${ctx.user.user_id}|DAILY`, 0, -1);
+          const completedWeeklyHabits = await ctx.Redis.lrange(`${ctx.user.user_id}|WEEKLY`, 0, -1);
+
+          habits = _.map(habits, habit => {
+            if (completedDailyHabits.includes(habit.habit_id) 
+            || completedWeeklyHabits.includes(habit.habit_id)) {
+              return Object.assign(habit, { completed_today: true });
+            } return habit;
+          });
+        } catch (err) {
+          ctx.logger.error(`Problem getting habits from cache: ${err}`);
+        }
+
+        return habits;
       },
 
       async getHabit(instance, args, ctx) {
@@ -118,12 +124,12 @@ const resolver = {
         if (recurrence === 'DAILY') {
           ctx.Redis.rpush(`${user_id}|DAILY`, habit_id);
     
-          ctx.Redis.expire(`${user_id}|DAILY`, moment().endOf('day').unix());
+          ctx.Redis.expireat(`${user_id}|DAILY`, moment().endOf('day').unix());
         } else if (recurrence === 'WEEKLY') {
           ctx.Redis.rpush(`${user_id}|WEEKLY`, habit_id);
     
           // first day of week according to iso is monday
-          ctx.Redis.expire(`${user_id}|WEEKLY`, moment().endOf('isoWeek').unix());
+          ctx.Redis.expireat(`${user_id}|WEEKLY`, moment().endOf('isoWeek').unix());
         }
       },
     },
