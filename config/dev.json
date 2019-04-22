@@ -2,5 +2,9 @@
     "dynamodb": {
         "habitTable": "habit-records",
         "userTable": "user-records"
+    },
+    "redis": {
+        "host": "hab-se-1k2zu9rnvuwwl.p9n4qp.0001.use1.cache.amazonaws.com",
+        "port": 6379
     }
 }
