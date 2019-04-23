@@ -1,26 +1,57 @@
 const Redis = require('ioredis');
 const logger = require('pino')();
+const moment = require('moment');
 
-const config = require(`../config/${process.env.NODE_ENV}.json`);
-
-const connectRedis = () => {
-    try {
-        const redis = new Redis({
+const redisConnect = () => (
+    new Promise((resolve, reject) => {
+        logger.info(`Attempting to connect to redis host ${process.env.REDIS_HOST}.`);
+        const redisClient = new Redis({
             host: process.env.REDIS_HOST,
             port: 6379,
-            connectTimeout: 1000,
+            connectTimeout: 2000,
         });
 
-        redis.on('error', err => {
-            logger.error(`Error connecting to redis instance: ${process.env.REDIS_HOST} with error: ${err}`);
-            redis.disconnect();
-        });
+        redisClient.on('connect', () => resolve(redisClient));
+        redisClient.on('error', (err) => reject(err));
+    })
+);
 
-        return redis;
-    } catch (err) {
-        logger.error('Error connecting to redis client');
-        return null;
-    }
+const RedisModel = () => {
+    const getCompletedHabits = async (user_id) => {
+        try {
+            const client = await redisConnect();
+            const completedDailyHabits = await client.lrange(`${user_id}|DAILY`, 0, -1);
+            const completedWeeklyHabits = await client.lrange(`${user_id}|WEEKLY`, 0, -1);
+
+            return [...completedDailyHabits, ...completedWeeklyHabits];
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    const completeHabit = async (user_id, habit_id, recurrence) => {
+        const client = await redisConnect();
+
+        if (recurrence === 'DAILY') {
+            client.rpush(`${user_id}|DAILY`, habit_id);
+
+            return client.expireat(`${user_id}|DAILY`, moment().endOf('day').unix());
+        }
+         
+        if (recurrence === 'WEEKLY') {
+            client.rpush(`${user_id}|WEEKLY`, habit_id);
+      
+            // first day of week according to iso is monday
+            return client.expireat(`${user_id}|WEEKLY`, moment().endOf('isoWeek').unix());
+        }
+
+        return 0;
+    };
+
+    return {
+        getCompletedHabits,
+        completeHabit,
+    };
 };
 
-module.exports = connectRedis;
+module.exports = RedisModel;

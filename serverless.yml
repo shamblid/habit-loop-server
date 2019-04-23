@@ -36,7 +36,7 @@ provider:
 
 functions:
   graphql:
-    handler: app.handler
+    handler: app.graphql
     events:
       - http:
           path: graphql
@@ -47,12 +47,6 @@ functions:
         - "Fn::GetAtt": ServerlessSecurityGroup.GroupId
       subnetIds:
         - Ref: PrivateSubnetA
-  playground:
-    handler: app.handler
-    events:
-       - http:
-          path: playground
-          method: get
   pushNotifications:
     handler: lib/pushNotifications.handler
     events:

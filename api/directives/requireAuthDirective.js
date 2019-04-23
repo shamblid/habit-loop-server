@@ -1,7 +1,7 @@
 const {
   SchemaDirectiveVisitor,
   AuthenticationError,
-} = require('apollo-server-express');
+} = require('apollo-server-lambda');
 const { defaultFieldResolver } = require('graphql');
 
 class RequireAuthDirective extends SchemaDirectiveVisitor {
