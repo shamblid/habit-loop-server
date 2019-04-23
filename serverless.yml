@@ -6,8 +6,12 @@ provider:
   profile: serverless
   stage: dev
   region: us-east-1
+  tracing:
+    lambda: true
   environment:
     NODE_ENV: ${env:NODE_ENV}
+    REDIS_HOST:
+      "Fn::GetAtt": [ElasticCacheCluster, RedisEndpoint.Address]
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -23,7 +27,7 @@ provider:
         - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records/index/*"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records"
         - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records/index/*"
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
         - ec2:CreateNetworkInterface
         - ec2:DescribeNetworkInterfaces
@@ -31,19 +35,18 @@ provider:
       Resource: "*"
 
 functions:
-  grahpql:
-    handler: app.handler
+  graphql:
+    handler: app.graphql
     events:
       - http:
           path: graphql
           method: post
           cors: true
-  playground:
-    handler: app.handler
-    events:
-       - http:
-          path: playground
-          method: get
+    vpc:
+      securityGroupIds:
+        - "Fn::GetAtt": ServerlessSecurityGroup.GroupId
+      subnetIds:
+        - Ref: PrivateSubnetA
   pushNotifications:
     handler: lib/pushNotifications.handler
     events:
@@ -171,3 +174,128 @@ resources:
            WriteCapacityUnits: 5
       
       TableName: user-records
+
+  VPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: "10.0.0.0/16"
+  IP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPC
+      InternetGatewayId:
+        Ref: InternetGateway
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - IP
+          - AllocationId
+      SubnetId:
+        Ref: PublicSubnetA
+  PrivateSubnetA:
+    DependsOn: VPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      AvailabilityZone: ${self:provider.region}a
+      CidrBlock: "10.0.1.0/24"
+  PublicSubnetA:
+    DependsOn: VPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPC
+      AvailabilityZone: ${self:provider.region}a
+      CidrBlock: "10.0.2.0/24"
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPC
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: NatGateway
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPC
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: InternetGateway
+  SubnetRouteTableAssociationLambdaPrivateA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PrivateSubnetA
+      RouteTableId:
+        Ref: PrivateRouteTable
+  SubnetRouteTableAssociationLambdaPublicA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PublicSubnetA
+      RouteTableId:
+        Ref: PublicRouteTable
+  ServerlessSecurityGroup:
+    DependsOn: VPC
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SecurityGroup for Serverless Functions
+      VpcId:
+        Ref: VPC
+  ServerlessStorageSecurityGroup:
+    DependsOn: VPC
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Ingress for Redis Cluster
+      VpcId:
+        Ref: VPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '6379'
+        ToPort: '6379'
+        SourceSecurityGroupId:
+          Ref: ServerlessSecurityGroup
+  ServerlessCacheSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: "Cache Subnet Group"
+      SubnetIds:
+      - Ref: PrivateSubnetA
+  ElasticCacheCluster:
+    DependsOn: ServerlessStorageSecurityGroup
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      AutoMinorVersionUpgrade: true
+      Engine: redis
+      CacheNodeType: ${self:custom.config.CACHE_INSTANCE_SIZE}
+      NumCacheNodes: 1
+      VpcSecurityGroupIds:
+      - "Fn::GetAtt": ServerlessStorageSecurityGroup.GroupId
+      CacheSubnetGroupName:
+        Ref: ServerlessCacheSubnetGroup
+
+custom:
+  config:
+    CACHE_INSTANCE_SIZE: cache.t1.micro

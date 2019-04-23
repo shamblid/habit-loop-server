@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const uuidv4 = require('uuid/v4');
+const moment = require('moment');
 
 const resolver = {
     Query: {
@@ -11,13 +12,29 @@ const resolver = {
           throw new Error('Unauthorized user!');
         }
 
+        let habits;
+
         try {
           const results = await ctx.HabitModel.getUserHabits(ctx.user.user_id);
-          return results.Items;
+          habits = results.Items;
         } catch (err) {
           ctx.logger.error(err);
           throw err;
         }
+
+        try {
+          const completedHabits = await ctx.Redis.getCompletedHabits(ctx.user.user_id);
+
+          habits = _.map(habits, habit => {
+            if (completedHabits.includes(habit.habit_id)) {
+              return Object.assign(habit, { completed_today: true });
+            } return habit;
+          });
+        } catch (err) {
+          ctx.logger.error(`Problem getting habits from cache: ${err}`);
+        }
+
+        return habits;
       },
 
       async getHabit(instance, args, ctx) {
@@ -56,7 +73,6 @@ const resolver = {
           habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
           created_at: `${Date.now()}`,
-          completed_today: false,
         };
         
         const habit = _.extend(input, generatedInput);
@@ -99,6 +115,17 @@ const resolver = {
         } catch (err) {
           ctx.logger.error(err);
           throw err;
+        }
+      },
+
+      async completeHabit(instance, { user_id, habit_id, recurrence }, ctx) {
+        ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${habit_id}.`);
+        
+        try {
+          return await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
+        } catch (err) {
+          ctx.logger.error(`Error trying to complete habit ${habit_id} for user ${user_id}.`);
+          return err;
         }
       },
     },
