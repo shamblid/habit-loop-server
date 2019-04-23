@@ -121,6 +121,8 @@ const resolver = {
       },
 
       async completeHabit(instance, { user_id, habit_id, recurrence }, ctx) {
+        ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${habit_id}.`);
+        
         if (recurrence === 'DAILY') {
           ctx.Redis.rpush(`${user_id}|DAILY`, habit_id);
     

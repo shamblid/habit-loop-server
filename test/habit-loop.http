@@ -1,5 +1,5 @@
 @localUrl = http://localhost:3000/graphql
-@qaUrl = https://klr9esc4a5.execute-api.us-east-1.amazonaws.com/dev/graphql
+@qaUrl = https://m7g5pc0boi.execute-api.us-east-1.amazonaws.com/dev/graphql
 @AuthToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtvb2xndXlAZ21haWwuY29tIiwidXNlcm5hbWUiOiJrb29sZ3V5MTEyIiwidXNlcl9pZCI6IjEiLCJyb2xlIjpbIlVTRVIiXSwiaWF0IjoxNTQ3MjYzNjgxLCJleHAiOjE1NDczNTAwODF9.VTXsW3V-qtcVZGiVz-AJViPW67THqlsz8JzBGhVVz1s
 POST {{qaUrl}}
 Content-Type: application/json

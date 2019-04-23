@@ -6,8 +6,8 @@ const config = require(`../config/${process.env.NODE_ENV}.json`);
 const connectRedis = () => {
     try {
         const redis = new Redis({
-            host: config.redis.host,
-            port: config.redis.port,
+            host: process.env.REDIS_HOST,
+            port: 6379,
             connectTimeout: 1000,
         });
 

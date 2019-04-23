@@ -24,6 +24,7 @@ module.exports = {
   },
   formatError: (error) => {
     logger.info(error);
+    console.log(error, 'help');
     return error;
   },
 };
