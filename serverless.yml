@@ -10,6 +10,9 @@ provider:
     lambda: true
   environment:
     NODE_ENV: ${env:NODE_ENV}
+    HABIT_TABLE: ${self:custom.config.HABIT_TABLE}
+    USER_TABLE: ${self:custom.config.USER_TABLE}
+    EVENT_TABLE: ${${self:custom.config.EVENT_TABLE}}
     REDIS_HOST:
       "Fn::GetAtt": [ElasticCacheCluster, RedisEndpoint.Address]
   iamRoleStatements:
@@ -23,10 +26,12 @@ provider:
         - dynamodb:GetItem
         - dynamodb:UpdateTable
       Resource: 
-        - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records"
-        - "arn:aws:dynamodb:us-east-1:229409410964:table/habit-records/index/*"
-        - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records"
-        - "arn:aws:dynamodb:us-east-1:229409410964:table/user-records/index/*"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}/index/*"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}/index/*"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/$${self:custom.config.EVENT_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/$${self:custom.config.EVENT_TABLE}/index/*"
     - Effect: Allow
       Action:
         - ec2:CreateNetworkInterface
@@ -63,118 +68,9 @@ plugins:
 
 resources:
  Resources:
-  HabitDynamoDBTable:
-    Type: "AWS::DynamoDB::Table"
-    Properties:
-      AttributeDefinitions:
-        -
-          AttributeName: habit_id
-          AttributeType: S
-        -
-          AttributeName: created_at
-          AttributeType: S
-        -
-          AttributeName: user_id
-          AttributeType: S
-
-      KeySchema:
-        -
-          AttributeName: habit_id
-          KeyType: HASH
-        -
-          AttributeName: created_at
-          KeyType: RANGE
-
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      
-      GlobalSecondaryIndexes:
-        -
-          IndexName: UserIndex
-          KeySchema:
-            -
-              AttributeName: user_id
-              KeyType: HASH
-            -
-              AttributeName: created_at
-              KeyType: RANGE
-
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-           ReadCapacityUnits: 5
-           WriteCapacityUnits: 5
-
-      TableName: habit-records
-
-  UserDynamoDBTable:
-    Type: "AWS::DynamoDB::Table"
-    Properties:
-      AttributeDefinitions:
-        -
-          AttributeName: user_id
-          AttributeType: S
-        -
-          AttributeName: created_at
-          AttributeType: S
-        -
-          AttributeName: email
-          AttributeType: S
-        -
-          AttributeName: push_token
-          AttributeType: S
-        -
-          AttributeName: reminder
-          AttributeType: S
-
-
-      KeySchema:
-        -
-          AttributeName: user_id
-          KeyType: HASH
-        -
-          AttributeName: created_at
-          KeyType: RANGE
-
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      
-      GlobalSecondaryIndexes:
-        -
-          IndexName: EmailIndex
-          KeySchema:
-            -
-              AttributeName: email
-              KeyType: HASH
-            -
-              AttributeName: created_at
-              KeyType: RANGE
-
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-           ReadCapacityUnits: 5
-           WriteCapacityUnits: 5
-
-        -
-          IndexName: PushNotificationIndex
-          KeySchema:
-            -
-              AttributeName: push_token
-              KeyType: HASH
-            -
-              AttributeName: reminder
-              KeyType: RANGE      
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-           ReadCapacityUnits: 5
-           WriteCapacityUnits: 5
-      
-      TableName: user-records
-
+  - ${file(resources/UserTable.yml)}
+  - ${file(resources/HabitTable.yml)}
+  - ${file(resources/EventTable.yml)}
   VPC:
       Type: AWS::EC2::VPC
       Properties:
@@ -299,3 +195,6 @@ resources:
 custom:
   config:
     CACHE_INSTANCE_SIZE: cache.t1.micro
+    HABIT_TABLE: habit-records-${self:provider.stage}
+    USER_TABLE: user-records-${self:provider.stage}
+    EVENT_TABLE: event-records-${self:provider.stage}

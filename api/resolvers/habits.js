@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const uuidv4 = require('uuid/v4');
-const moment = require('moment');
 
 const resolver = {
     Query: {

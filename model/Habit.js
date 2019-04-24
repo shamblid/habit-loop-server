@@ -7,7 +7,7 @@ const HabitValidator = require('./validators/Habit');
 // item contains name, type, habit_id, user_id, created_at
 const createUpdate = (item) => {
   const updateTypes = ['name', 'type', 'recurrence'];
-  console.log(item);
+
   const types = _.pick(item, updateTypes);
 
   const ExpressionAttributeNames = {};
@@ -25,14 +25,12 @@ const createUpdate = (item) => {
 
   const UpdateExpression = `set ${expression}`;
 
-  console.log(UpdateExpression, ExpressionAttributeNames, ExpressionAttributeValues);
   return [UpdateExpression, ExpressionAttributeValues, ExpressionAttributeNames];
 };
 
 class Habit {
   constructor() {
-    const config = require(`../config/${process.env.NODE_ENV}.json`);
-    this.tableName = config.dynamodb.habitTable;
+    this.tableName = process.env.HABIT_TABLE;
 
     // Set AWS configs for tests if we have a local db
     // Might be able to remove this with servless local dynamodb plugin
