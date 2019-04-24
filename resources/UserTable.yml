@@ -1,66 +1,66 @@
-  UserDynamoDBTable:
-    Type: "AWS::DynamoDB::Table"
-    Properties:
-      AttributeDefinitions:
-        -
-          AttributeName: user_id
-          AttributeType: S
-        -
-          AttributeName: created_at
-          AttributeType: S
-        -
-          AttributeName: email
-          AttributeType: S
-        -
-          AttributeName: push_token
-          AttributeType: S
-        -
-          AttributeName: reminder
-          AttributeType: S
+UserDynamoDBTable:
+  Type: "AWS::DynamoDB::Table"
+  Properties:
+    AttributeDefinitions:
+      -
+        AttributeName: user_id
+        AttributeType: S
+      -
+        AttributeName: created_at
+        AttributeType: S
+      -
+        AttributeName: email
+        AttributeType: S
+      -
+        AttributeName: push_token
+        AttributeType: S
+      -
+        AttributeName: reminder
+        AttributeType: S
 
 
-      KeySchema:
-        -
-          AttributeName: user_id
-          KeyType: HASH
-        -
-          AttributeName: created_at
-          KeyType: RANGE
+    KeySchema:
+      -
+        AttributeName: user_id
+        KeyType: HASH
+      -
+        AttributeName: created_at
+        KeyType: RANGE
 
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      
-      GlobalSecondaryIndexes:
-        -
-          IndexName: EmailIndex
-          KeySchema:
-            -
-              AttributeName: email
-              KeyType: HASH
-            -
-              AttributeName: created_at
-              KeyType: RANGE
+    ProvisionedThroughput:
+      ReadCapacityUnits: 5
+      WriteCapacityUnits: 5
+    
+    GlobalSecondaryIndexes:
+      -
+        IndexName: EmailIndex
+        KeySchema:
+          -
+            AttributeName: email
+            KeyType: HASH
+          -
+            AttributeName: created_at
+            KeyType: RANGE
 
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-           ReadCapacityUnits: 5
-           WriteCapacityUnits: 5
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
 
-        -
-          IndexName: PushNotificationIndex
-          KeySchema:
-            -
-              AttributeName: push_token
-              KeyType: HASH
-            -
-              AttributeName: reminder
-              KeyType: RANGE      
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-           ReadCapacityUnits: 5
-           WriteCapacityUnits: 5
-      
-      TableName: ${self:custom.config.USER_TABLE}
+      -
+        IndexName: PushNotificationIndex
+        KeySchema:
+          -
+            AttributeName: push_token
+            KeyType: HASH
+          -
+            AttributeName: reminder
+            KeyType: RANGE      
+        Projection:
+          ProjectionType: ALL
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    
+    TableName: ${self:custom.config.USER_TABLE}
