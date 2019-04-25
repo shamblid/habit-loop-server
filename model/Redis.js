@@ -54,7 +54,7 @@ const RedisModel = () => {
             return client.exists(`${user_id}|DAILY`);
         } catch (err) {
             logger.error(`Error checking for daily habit completion for user ${user_id} with error: ${err}.`);
-            return err;
+            return 1;
         }
     };
 

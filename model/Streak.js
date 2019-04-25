@@ -47,7 +47,7 @@ class Streak {
     const params = {
         TableName: this.tableName,
         Key: { user_id },
-        UpdateExpression: 'SET user_id = :user_id, score = score + :incr, expiration = :expiration, streak = :streak',
+        UpdateExpression: 'SET score = score + :incr, expiration = :expiration, streak = :streak',
         ExpressionAttributeValues: {
             ':incr': 1,
             ':expiration': moment().add(1, 'day').endOf('day'),

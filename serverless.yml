@@ -13,6 +13,7 @@ provider:
     HABIT_TABLE: ${self:custom.config.HABIT_TABLE}
     USER_TABLE: ${self:custom.config.USER_TABLE}
     EVENT_TABLE: ${self:custom.config.EVENT_TABLE}
+    STREAK_TABLE: ${self:custom.config.STREAK_TABLE}
     REDIS_HOST: 
       "Fn::GetAtt": [ElasticCacheCluster, RedisEndpoint.Address]
   iamRoleStatements:
