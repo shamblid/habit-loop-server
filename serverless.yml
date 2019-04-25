@@ -73,6 +73,7 @@ resources:
   - ${file(resources/dynamo/UserTable.yml)}
   - ${file(resources/dynamo/HabitTable.yml)}
   - ${file(resources/dynamo/EventTable.yml)}
+  - ${file(resources/dynamo/StreakTable.yml)}
   - ${file(resources/Network.yml)}
   - ${file(resources/ElastiCache.yml)}
 
