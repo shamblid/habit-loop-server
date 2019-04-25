@@ -63,20 +63,5 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
-
-        -
-          IndexName: StreakIndex
-          KeySchema:
-            -
-              AttributeName: streak
-              KeyType: HASH
-            -
-              AttributeName: score
-              KeyType: RANGE      
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
       
       TableName: ${self:custom.config.USER_TABLE}

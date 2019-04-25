@@ -12,9 +12,6 @@ Resources:
         -
           AttributeName: score
           AttributeType: N
-        -
-          AttributeName: expiration
-          AttributeType: S
 
       KeySchema:
         -
@@ -35,6 +32,7 @@ Resources:
             -
               AttributeName: score
               KeyType: RANGE      
+
           Projection:
             ProjectionType: ALL
           ProvisionedThroughput:

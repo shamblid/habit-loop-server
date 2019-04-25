@@ -25,6 +25,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:UpdateTable
+        - dynamodb:DescribeTimeToLive
       Resource: 
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}/index/*"
@@ -83,4 +84,4 @@ custom:
     HABIT_TABLE: habit-records-${self:provider.stage}
     USER_TABLE: user-records-${self:provider.stage}
     EVENT_TABLE: event-records-${self:provider.stage}
-    EVENT_TABLE: streak-records-${self:provider.stage}
+    STREAK_TABLE: streak-records-${self:provider.stage}
