@@ -123,7 +123,7 @@ const resolver = {
         try {
           // find out if this is the first habit being completed today
           const completed = await ctx.Redis.completedHabitToday(user_id);
-          
+
           // make sure completeHabit makes an entry before adding to streak and events
           await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
           if (completed === 0) { 

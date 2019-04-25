@@ -19,6 +19,16 @@ const resolvers = {
       const result = await UserModel.getByEmail(user.email);
       return _.get(result, 'Items[0]');
     },
+
+    async getTopStreaks(instance, args, { StreakModel, logger }) {
+      try {
+        const result = await StreakModel.getTopStreaks();
+        return result.Items;
+      } catch (err) {
+        logger.error(`Error getting top streaks: ${err}.`);
+        throw err;
+      }
+    },
   },
   
   Mutation: {
