@@ -19,6 +19,25 @@ class Streak {
   }
 
   /**
+   * Create streak for a user
+   *
+   * @param { String } user_id User identification as the primary key in the dynamo table
+   * @return { Object } Streak object
+   */
+  create(user_id, username) {
+    const params = {
+      TableName: this.tableName,
+      Item: {
+        user_id,
+        username,
+        score: 0,
+      },
+    };
+
+    return this.docClient.put(params).promise();
+  }
+
+  /**
    * Get streak for a user
    *
    * @param { String } user_id User identification as the primary key in the dynamo table
@@ -50,7 +69,7 @@ class Streak {
         UpdateExpression: 'SET score = score + :incr, expiration = :expiration, streak = :streak',
         ExpressionAttributeValues: {
             ':incr': 1,
-            ':expiration': moment().add(1, 'day').endOf('day'),
+            ':expiration': moment().add(1, 'day').endOf('day').unix(),
             ':streak': 'STREAK',
         },
         ReturnValues: 'UPDATED_NEW',
@@ -59,11 +78,14 @@ class Streak {
     return this.docClient.update(params).promise();
   }
 
-  getTopStreaks(Limit = 20) {
+  getTopStreaks(Limit = 10) {
       const params = {
           TableName: this.tableName,
           IndexName: 'StreakIndex',
-          KeyConditionExpression: 'streak = STREAK',
+          KeyConditionExpression: 'streak = :streak',
+          ExpressionAttributeValues: {
+            ':streak': 'STREAK',
+          },
           ScanIndexForward: false,
           Limit,
       };
