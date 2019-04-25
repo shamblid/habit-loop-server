@@ -48,9 +48,20 @@ const RedisModel = () => {
         return 0;
     };
 
+    const completedHabitToday = async (user_id) => {
+        try {
+            const client = await redisConnect();
+            return client.exists(`${user_id}|DAILY`);
+        } catch (err) {
+            logger.error(`Error checking for daily habit completion for user ${user_id} with error: ${err}.`);
+            return err;
+        }
+    };
+
     return {
         getCompletedHabits,
         completeHabit,
+        completedHabitToday,
     };
 };
 

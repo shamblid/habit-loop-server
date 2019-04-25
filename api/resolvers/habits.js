@@ -121,7 +121,13 @@ const resolver = {
         ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${habit_id}.`);
         
         try {
-          return await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
+          // make sure completeHabit makes an entry before adding to streak and events
+          await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
+          const completed = await ctx.Redis.completedHabitToday(user_id);
+          if (completed === 0) { 
+            ctx.Streak.update(user_id, habit_id);
+          }
+          return 1;
         } catch (err) {
           ctx.logger.error(`Error trying to complete habit ${habit_id} for user ${user_id}.`);
           return err;

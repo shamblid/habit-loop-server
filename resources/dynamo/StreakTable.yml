@@ -1,0 +1,50 @@
+Resources:
+  StreakDynamoDBTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: user_id
+          AttributeType: S
+        -
+          AttributeName: streak
+          AttributeType: S
+        -
+          AttributeName: score
+          AttributeType: N
+        -
+          AttributeName: expiration
+          AttributeType: S
+
+      KeySchema:
+        -
+          AttributeName: user_id
+          KeyType: HASH
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+      GlobalSecondaryIndexes:
+        -
+          IndexName: StreakIndex
+          KeySchema:
+            -
+              AttributeName: streak
+              KeyType: HASH
+            -
+              AttributeName: score
+              KeyType: RANGE      
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+
+      TimeToLiveSpecification:
+        Enabled: True
+        AttributeName: expiration
+
+      TableName: ${self:custom.config.STREAK_TABLE}
+
+    

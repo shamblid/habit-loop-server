@@ -33,6 +33,8 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}/index/*"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}/stream/*"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}/index/*"
     - Effect: Allow
       Action:
         - ec2:CreateNetworkInterface
@@ -80,3 +82,4 @@ custom:
     HABIT_TABLE: habit-records-${self:provider.stage}
     USER_TABLE: user-records-${self:provider.stage}
     EVENT_TABLE: event-records-${self:provider.stage}
+    EVENT_TABLE: streak-records-${self:provider.stage}
