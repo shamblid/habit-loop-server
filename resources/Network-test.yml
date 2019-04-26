@@ -11,22 +11,6 @@ Resources:
         Ref: ServerlessVPC
       AvailabilityZone: ${self:provider.region}a
       CidrBlock: "10.0.0.0/24"
-  ServerlessSubnetB:
-    DependsOn: ServerlessVPC
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId:
-        Ref: ServerlessVPC
-      AvailabilityZone: ${self:provider.region}c
-      CidrBlock: "10.0.1.0/24"
-  ServerlessSubnetC:
-    DependsOn: ServerlessVPC
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId:
-        Ref: ServerlessVPC
-      AvailabilityZone: ${self:provider.region}d
-      CidrBlock: "10.0.2.0/24"
   ServerlessSecurityGroup:
     DependsOn: ServerlessVPC
     Type: AWS::EC2::SecurityGroup
@@ -38,7 +22,7 @@ Resources:
     DependsOn: ServerlessVPC
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Ingress for Memcached Cluster & RDS Instance
+      GroupDescription: Ingress for Redis
       VpcId:
         Ref: ServerlessVPC
       SecurityGroupIngress:
@@ -53,5 +37,3 @@ Resources:
       Description: "Cache Subnet Group"
       SubnetIds:
       - Ref: ServerlessSubnetA
-      - Ref: ServerlessSubnetB
-      - Ref: ServerlessSubnetC

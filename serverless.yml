@@ -14,8 +14,8 @@ provider:
     USER_TABLE: ${self:custom.config.USER_TABLE}
     EVENT_TABLE: ${self:custom.config.EVENT_TABLE}
     STREAK_TABLE: ${self:custom.config.STREAK_TABLE}
-    REDIS_HOST: 
-      "Fn::GetAtt": [ElasticCacheCluster, RedisEndpoint.Address]
+    REDIS_HOST: "redis-17149.c14.us-east-1-2.ec2.cloud.redislabs.com"
+    REDIS_PASSWORD: ${ssm:habit_loop_redis_password}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -37,12 +37,6 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}/stream/*"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}/index/*"
-    - Effect: Allow
-      Action:
-        - ec2:CreateNetworkInterface
-        - ec2:DescribeNetworkInterfaces
-        - ec2:DeleteNetworkInterface
-      Resource: "*"
 
 functions:
   graphql:
@@ -52,11 +46,7 @@ functions:
           path: graphql
           method: post
           cors: true
-    vpc:
-      securityGroupIds:
-        - "Fn::GetAtt": ServerlessSecurityGroup.GroupId
-      subnetIds:
-        - Ref: PrivateSubnetA
+
   pushNotifications:
     handler: lib/pushNotifications.handler
     events:
@@ -76,12 +66,9 @@ resources:
   - ${file(resources/dynamo/HabitTable.yml)}
   - ${file(resources/dynamo/EventTable.yml)}
   - ${file(resources/dynamo/StreakTable.yml)}
-  - ${file(resources/Network.yml)}
-  - ${file(resources/ElastiCache.yml)}
 
 custom:
   config:
-    CACHE_INSTANCE_SIZE: cache.t2.micro
     HABIT_TABLE: habit-records-${self:provider.stage}
     USER_TABLE: user-records-${self:provider.stage}
     EVENT_TABLE: event-records-${self:provider.stage}

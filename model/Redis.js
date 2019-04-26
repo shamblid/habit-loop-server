@@ -7,7 +7,8 @@ const redisConnect = () => (
         logger.info(`Attempting to connect to redis host ${process.env.REDIS_HOST}.`);
         const redisClient = new Redis({
             host: process.env.REDIS_HOST,
-            port: 6379,
+            password: process.env.REDIS_PASSWORD,
+            port: 17149,
             connectTimeout: 2000,
         });
 
