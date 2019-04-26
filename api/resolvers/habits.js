@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const uuidv4 = require('uuid/v4');
-const moment = require('moment');
 
 const resolver = {
     Query: {
@@ -122,7 +121,15 @@ const resolver = {
         ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${habit_id}.`);
         
         try {
-          return await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
+          // find out if this is the first habit being completed today
+          const completed = await ctx.Redis.completedHabitToday(user_id);
+
+          // make sure completeHabit makes an entry before adding to streak and events
+          await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
+          if (completed === 0) { 
+            ctx.StreakModel.update(user_id, habit_id);
+          }
+          return 1;
         } catch (err) {
           ctx.logger.error(`Error trying to complete habit ${habit_id} for user ${user_id}.`);
           return err;

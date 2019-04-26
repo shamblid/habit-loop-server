@@ -7,7 +7,8 @@ const redisConnect = () => (
         logger.info(`Attempting to connect to redis host ${process.env.REDIS_HOST}.`);
         const redisClient = new Redis({
             host: process.env.REDIS_HOST,
-            port: 6379,
+            password: process.env.REDIS_PASSWORD,
+            port: 17149,
             connectTimeout: 2000,
         });
 
@@ -48,9 +49,20 @@ const RedisModel = () => {
         return 0;
     };
 
+    const completedHabitToday = async (user_id) => {
+        try {
+            const client = await redisConnect();
+            return client.exists(`${user_id}|DAILY`);
+        } catch (err) {
+            logger.error(`Error checking for daily habit completion for user ${user_id} with error: ${err}.`);
+            return 1;
+        }
+    };
+
     return {
         getCompletedHabits,
         completeHabit,
+        completedHabitToday,
     };
 };
 

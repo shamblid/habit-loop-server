@@ -3,6 +3,7 @@ const { gql } = require('apollo-server-lambda');
 const userDefs = gql`
 	extend type Query {
 		me: User
+		getTopStreaks: [Streak!]
 	}
 	
 	extend type Mutation {
@@ -25,6 +26,12 @@ const userDefs = gql`
 		created_at: String
 		role: [String]
 		manager: String
+	}
+
+	type Streak {
+		username: String
+		user_id: String
+		score: Int
 	}
 `;
 

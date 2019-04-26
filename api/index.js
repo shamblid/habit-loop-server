@@ -8,6 +8,8 @@ const schemaDirectives = require('./directives');
 const UserModel = require('@userModel');
 const HabitModel = require('@habitModel');
 const RedisModel = require('../model/Redis');
+const EventModel = require('../model/Event');
+const StreakModel = require('../model/Streak');
 
 const getAuth = headers => {
   const token = _.get(headers, 'Authorization', null);
@@ -34,6 +36,8 @@ module.exports = {
     user: getAuth(event.headers),
     HabitModel: new HabitModel(),
     UserModel: new UserModel(),
+    EventModel: new EventModel(),
+    StreakModel: new StreakModel(),
     Redis: RedisModel(),
   }),
   formatResponse: (response) => {

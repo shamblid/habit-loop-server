@@ -3,8 +3,7 @@ const UserValidator = require('./validators/User');
 
 class User {
   constructor() {
-    const config = require(`../config/${process.env.NODE_ENV}.json`);
-    this.tableName = config.dynamodb.userTable;
+    this.tableName = process.env.USER_TABLE;
 
     // Set AWS configs for tests if we have a local db
     // Might be able to remove this with servless local dynamodb plugin
@@ -36,6 +35,28 @@ class User {
     };
 
     return this.docClient.get(params).promise();
+  }
+
+  /**
+   * Get specific User for a user
+   *
+   * @param { String } user_id User identification as the primary key in the dynamo table
+   * @param { String } created_at one of the keys of the dynamo table
+   * @return { Object } User object
+   */
+  getByIdOnly(user_id) {
+    const params = {
+      TableName: this.tableName,
+      KeyConditionExpression: '#user = :user',
+      expressionAttributeNames: {
+        '#user': 'user',
+      },
+      ExpressionAttributeValues: {
+        ':user': user_id,
+      },
+    };
+
+    return this.docClient.query(params).promise();
   }
 
   /**
@@ -79,10 +100,12 @@ class User {
   }
 
   /**
-   * Get the list of Users for a specific user
+   * Update push notification details
    *
-   * @param { Object } user Object containing details of the new User
-   * @return { Array } Returns array of userUsers
+   * @param { Object } 
+   * @param push_token string representing expo token
+   * @param reminder when to send user a reminder
+   * @return Promise containing dynamodb action
    */
   updatePushNotification({ user_id, created_at }, push_token, reminder = 'MORNING') {
     const params = {

@@ -1,0 +1,39 @@
+Resources:
+  ServerlessVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.0.0.0/16"
+  ServerlessSubnetA:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: ServerlessVPC
+      AvailabilityZone: ${self:provider.region}a
+      CidrBlock: "10.0.0.0/24"
+  ServerlessSecurityGroup:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SecurityGroup for Serverless Functions
+      VpcId:
+        Ref: ServerlessVPC
+  ServerlessStorageSecurityGroup:
+    DependsOn: ServerlessVPC
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Ingress for Redis
+      VpcId:
+        Ref: ServerlessVPC
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: '6379'
+        ToPort: '6379'
+        SourceSecurityGroupId:
+          Ref: ServerlessSecurityGroup
+  ServerlessCacheSubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: "Cache Subnet Group"
+      SubnetIds:
+      - Ref: ServerlessSubnetA

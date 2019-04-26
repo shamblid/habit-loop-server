@@ -19,11 +19,21 @@ const resolvers = {
       const result = await UserModel.getByEmail(user.email);
       return _.get(result, 'Items[0]');
     },
+
+    async getTopStreaks(instance, args, { StreakModel, logger }) {
+      try {
+        const result = await StreakModel.getTopStreaks();
+        return result.Items;
+      } catch (err) {
+        logger.error(`Error getting top streaks: ${err}.`);
+        throw err;
+      }
+    },
   },
   
   Mutation: {
     // Handle user signup
-    async signup(instance, args, { logger, UserModel }) {
+    async signup(instance, args, { logger, UserModel, StreakModel }) {
       try {
         const {
           username,
@@ -41,7 +51,7 @@ const resolvers = {
         };
 
         await UserModel.create(user);
-
+        await StreakModel.create(user.user_id, user.username);
         logger.info('New user has been created!');
 
         // return json web token
