@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const moment = require('moment');
+const logger = require('pino')();
 
 // https://www.dynamodbguide.com/leaderboard-write-sharding/
 class Streak {
@@ -24,15 +25,15 @@ class Streak {
    * @param { String } user_id User identification as the primary key in the dynamo table
    * @return { Object } Streak object
    */
-  create(user_id, username) {
+  create(item, condition = null) {
     const params = {
       TableName: this.tableName,
-      Item: {
-        user_id,
-        username,
-        score: 0,
-      },
+      Item: item,
     };
+
+    if (condition) {
+      params.ConditionExpression = condition;
+    }
 
     return this.docClient.put(params).promise();
   }
@@ -62,7 +63,27 @@ class Streak {
    * @param { String } user_id User identification as the primary key in the streak table
    * @return { Object } Updated Values
    */
-  update(user_id) {
+  async upsert(user_id, username) {
+    // if creation succeeds we return else the row needs to be updated.
+    try {
+      const createParams = {
+        user_id,
+        username,
+        score: 1,
+        streak: 'STREAK',
+        expiration: moment().add(1, 'day').endOf('day').unix(),
+      };
+      const results = await this.create(createParams, 'attribute_not_exists(user_id)');
+      return results;
+    } catch (err) {
+      if (err.code === 'ConditionalCheckFailedException') {
+        logger.info('Row already exists, will update streak now.');
+      } else {
+        logger.error(`Unable to update user streak for user ${user_id} with err ${err}`);
+        throw err;
+      }
+    }
+
     const params = {
         TableName: this.tableName,
         Key: { user_id },

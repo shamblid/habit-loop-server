@@ -1,9 +1,9 @@
 const {
     makeExecutableSchema,
     addMockFunctionsToSchema,
-    mockServer
+    mockServer,
 } = require('graphql-tools');
-const { typeDefs, resolvers } = require('../api')
+const api = require('../api');
 
 const defaultData = [
 	{
@@ -17,7 +17,7 @@ const defaultData = [
 		name: 'C-3PO',
 		gender: 'bot',
 		homeworld: 'Tattoine'
-	}
+	},
 ];
 
 const allPeopletest = {
@@ -31,7 +31,7 @@ const allPeopletest = {
     `,
     variables: { },
     context: { },
-    expected: { data: { defaultData } }
+    expected: { data: { defaultData } },
 };
 
 describe('Schema', () => {
