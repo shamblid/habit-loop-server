@@ -117,7 +117,10 @@ const resolver = {
         }
       },
 
-      async completeHabit(instance, { user_id, habit_id, recurrence }, ctx) {
+      async completeHabit(instance, { habit_id, recurrence }, ctx) {
+        const user_id = _.get(ctx, 'user.user_id');
+        const username = _.get(ctx, 'user.username');
+        
         ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${habit_id}.`);
         
         try {
@@ -127,7 +130,7 @@ const resolver = {
           // make sure completeHabit makes an entry before adding to streak and events
           await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
           if (completed === 0) { 
-            ctx.StreakModel.update(user_id, habit_id);
+            ctx.StreakModel.upsert(user_id, username);
           }
           return 1;
         } catch (err) {

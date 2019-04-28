@@ -51,7 +51,6 @@ const resolvers = {
         };
 
         await UserModel.create(user);
-        await StreakModel.create(user.user_id, user.username);
         logger.info('New user has been created!');
 
         // return json web token

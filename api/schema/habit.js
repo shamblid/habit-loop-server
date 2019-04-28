@@ -15,7 +15,7 @@ const habitDefs = gql`
 		updateHabit(input: UpdateHabitInput!): Habit 
 		updatePriority(priority: Rank!, habit_id: String!, created_at: String!): Habit
 		updateNotification(notify: Reminder, habit_id: String!, created_at: String!): Habit
-		completeHabit(user_id: String!, habit_id: String!, recurrence: String!): Boolean
+		completeHabit(habit_id: String!, recurrence: String!): Boolean
 	}
 
 	input HabitInput {
