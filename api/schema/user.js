@@ -4,12 +4,14 @@ const userDefs = gql`
 	extend type Query {
 		me: User
 		getTopStreaks: [Streak!]
+		getGroupLeaderboard: [Streak]
 	}
 	
 	extend type Mutation {
 		signup(input: SignupInput!): String
 		login(email: String!, password: String!): String
 		registerPushNotification(token: String! reminder: Reminder): String @requireAuth(role: USER)
+		addMemberToGroup(group: String!): String
 	} 
 
 	input SignupInput {

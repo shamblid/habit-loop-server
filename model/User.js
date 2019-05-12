@@ -150,6 +150,17 @@ class User {
 
     return this.docClient.update(params).promise();
   }
+
+  // addMemberToGroup({ user_id, created_at }, group_id) {
+  //   const params = {
+  //     TableName: this.tableName,
+  //     Key: {
+  //       user_id,
+  //       created_at,
+  //     },
+  //     UpdateExpression: 'set'
+  //   }
+  // }
 }
 
 module.exports = User;

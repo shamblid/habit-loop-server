@@ -29,11 +29,27 @@ const resolvers = {
         throw err;
       }
     },
+
+    async getGroupLeaderboard(instance, args, { user, UserModel, StreakModel, logger }) {
+      try {
+        const {
+          Items: user,
+        } = await UserModel.getById(user);
+        const groups = _.get(user, 'groups');
+        const {
+          Items: leaderboard,
+        } = await StreakModel.getGroupLeaderboard(groups);
+        return leaderboard;
+      } catch (err) {
+        logger.error(err);
+        return err;
+      }
+    },
   },
   
   Mutation: {
     // Handle user signup
-    async signup(instance, args, { logger, UserModel, StreakModel }) {
+    async signup(instance, args, { logger, UserModel }) {
       try {
         const {
           username,
@@ -47,7 +63,7 @@ const resolvers = {
           email,
           created_at: `${Date.now()}`,
           role: ['USER'],
-          password: await bcrypt.hash(password, 10),
+          password: await bcrypt.hash(password, 10)
         };
 
         await UserModel.create(user);
@@ -114,6 +130,17 @@ const resolvers = {
       } catch (err) {
         logger.error('REGISTER_PUSH_NOTIFICATION_ERROR', err);
         return '';
+      }
+    },
+
+    async addMemberToGroup(instance, { group_id }, { user, UserModel, logger }) {
+      try {
+        const results = await UserModel.addMemberToGroup(user, group_id);
+        logger.info(`Added member: ${user.user_id} to group: ${group_id}`);
+        return results;
+      } catch (err) {
+        logger.error('ADD_MEMBER_TO_GROUP_ERROR', err);
+        return err;
       }
     },
   },
