@@ -30,17 +30,24 @@ const resolvers = {
       }
     },
 
-    async getGroupLeaderboard(instance, args, { user, UserModel, StreakModel, logger }) {
+    async getGroupLeaderboard(instance, args, { user, UserModel, logger }) {
+      let groups;
+
       try {
         const {
-          Items: user,
-        } = await UserModel.getById(user);
-        const groups = _.get(user, 'groups');
+          Items: userData,
+        } = await UserModel.getByIdOnly(user.user_id);
+        groups = _.get(userData, 'groups');
+      } catch (err) {
+        console.log(err, '1');
+      }
+      try {
         const {
           Items: leaderboard,
-        } = await StreakModel.getGroupLeaderboard(groups);
+        } = await UserModel.getUsersInGroups(groups);
         return leaderboard;
       } catch (err) {
+        console.log(err, '2');
         logger.error(err);
         return err;
       }
@@ -63,7 +70,8 @@ const resolvers = {
           email,
           created_at: `${Date.now()}`,
           role: ['USER'],
-          password: await bcrypt.hash(password, 10)
+          password: await bcrypt.hash(password, 10),
+          group: ['TEST'],
         };
 
         await UserModel.create(user);
@@ -129,7 +137,7 @@ const resolvers = {
         return results;
       } catch (err) {
         logger.error('REGISTER_PUSH_NOTIFICATION_ERROR', err);
-        return '';
+        return err;
       }
     },
 

@@ -101,14 +101,14 @@ class Streak {
 
   getTopStreaks(Limit = 10) {
       const params = {
-          TableName: this.tableName,
-          IndexName: 'StreakIndex',
-          KeyConditionExpression: 'streak = :streak',
-          ExpressionAttributeValues: {
-            ':streak': 'STREAK',
-          },
-          ScanIndexForward: false,
-          Limit,
+        TableName: this.tableName,
+        IndexName: 'StreakIndex',
+        KeyConditionExpression: 'streak = :streak',
+        ExpressionAttributeValues: {
+          ':streak': 'STREAK',
+        },
+        ScanIndexForward: false,
+        Limit,
       };
 
       return this.docClient.query(params).promise();

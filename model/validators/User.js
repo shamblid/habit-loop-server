@@ -13,6 +13,7 @@ class UserValidator extends BaseValidator {
       push_token: 'string',
       timestamp: 'string',
       reminder: 'string',
+      group: 'object',
     };
 
     /**
@@ -29,6 +30,7 @@ class UserValidator extends BaseValidator {
       'push_token',
       'timestamp',
       'reminder',
+      'group',
     ];
   }
 }

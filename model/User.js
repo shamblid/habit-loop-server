@@ -1,6 +1,21 @@
 const AWS = require('aws-sdk');
 const UserValidator = require('./validators/User');
 
+const removeLastComma = (str) => str.replace(/,(\s+)?$/, '');   
+
+const createGroupQuery = (groups = ['TEST', 'TEST1', 'TEST2']) => {
+  const mapFilter = groups.reduce((acc, group, index) => `${acc}:group${index + 1}, `, '');
+
+  const ExpressionAttributeValues = groups.reduce((acc, group, index) => {
+    acc[`:group${index + 1}`] = group;
+    return acc;
+  }, {});
+
+  const FilterExpression = `#group IN (${removeLastComma(mapFilter)})`;
+
+  return [FilterExpression, ExpressionAttributeValues];
+};
+
 class User {
   constructor() {
     this.tableName = process.env.USER_TABLE;
@@ -161,6 +176,22 @@ class User {
   //     UpdateExpression: 'set'
   //   }
   // }
+
+  getUsersInGroups(groups = ['TEST']) {
+    const [FilterExpression, ExpressionAttributeValues] = createGroupQuery(groups);
+
+    const params = {
+      TableName: this.tableName,
+      KeyConditionExpression: '#group = '
+      FilterExpression,
+      ExpressionAttributeValues,
+      ExpressionAttributeNames: {
+        '#group': 'group',
+      },
+    };
+
+    return this.docClient.query(params).promise();
+  }
 }
 
 module.exports = User;
