@@ -26,6 +26,36 @@ class Streak extends User {
     return this.docClient.query(params).promise();
   }
 
+  async getUsers(users) {
+    const keys = _.map(users, user => ({
+        user_id: user.user_id,
+        item_id: user.streak_id,
+    }));
+
+    const params = {
+      RequestItems: {
+        [this.tableName]: {
+          Keys: keys,
+        },
+      },
+    };
+
+
+    const {
+      Responses: table,
+    } = await this.docClient.batchGet(params).promise();
+
+    const streaks = table[`${this.tableName}`];
+
+    return _(streaks)
+      .map(streak => ({
+          score: streak.score,
+          username: streak.username,
+      }))
+      .orderBy(streak => streak.score, ['desc'])
+      .value();
+  }
+
   /**
    * Update streak. If we call this function we assume the user 
    * is completing a habit for the first time today and can set 
@@ -88,7 +118,7 @@ class Streak extends User {
         ScanIndexForward: false,
         Limit,
       };
-      
+
       return this.docClient.query(params).promise();
   }
 }

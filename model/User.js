@@ -56,7 +56,7 @@ class User {
       },
     };
 
-    return this.docClient.query(params).promise();
+     return this.docClient.query(params).promise();
   }
 
   /**

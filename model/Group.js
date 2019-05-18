@@ -28,31 +28,15 @@ class Group extends User {
     return this.docClient.put(params).promise();
   }
 
-  // Since groups is many-to-many with users we need to
-  // update group and then create new row for user in group
-  // These are separate functions since dynamo doesn't have batch
-  // update nor update and put together.
-  addMemberToGroup({ user_id }, group_id) {
-    // const params = {
-    //   TableName: this.tableName,
-    //   Key: {
-    //     user_id,
-    //     created_at,
-    //   },
-    //   UpdateExpression: 'set group = :g '
-    // }
-  }
+  addMemberToGroup(member) {
+    this.validator.check(member);
+    
+    const params = {
+      TableName: this.tableName,
+      Item: member,
+    };
 
-  
-  addGroupForMember() {
-    // const params = {
-    //   TableName: this.tableName,
-    //   Key: {
-    //     user_id,
-    //     created_at,
-    //   },
-    //   UpdateExpression: 'set group = :g '
-    // }
+    return this.docClient.put(params).promise();
   }
 
   getUsersInGroups(groups = 'group-760c118b-0999-42b1-94c3-de1788f87873') {

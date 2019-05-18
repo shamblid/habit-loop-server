@@ -30,22 +30,14 @@ const resolvers = {
       }
     },
 
-    async getGroupLeaderboard(instance, args, { user, UserModel, GroupModel, logger }) {
-      let groups;
-      // console.log(user);
-      // try {
-      //   const {
-      //     Items: userData,
-      //   } = await UserModel.getByIdOnly(user.user_id);
-      //   groups = _.get(userData, 'groups');
-      // } catch (err) {
-      //   console.log(err, '1');
-      // }
+    async getGroupLeaderboard(instance, { group_id }, { StreakModel, GroupModel, logger }) {
       try {
         const {
-          Items: leaderboard,
-        } = await GroupModel.getUsersInGroups(groups);
-        return leaderboard;
+          Items: users,
+        } = await GroupModel.getUsersInGroups();
+
+        const streaks = await StreakModel.getUsers(users);
+        return streaks;
       } catch (err) {
         logger.error(err);
         return err;
@@ -83,7 +75,6 @@ const resolvers = {
           created_at: `${Date.now()}`,
           role: ['USER'],
           password: await bcrypt.hash(password, 10),
-          group: ['TEST'],
         };
 
         await UserModel.create(user);
@@ -156,18 +147,12 @@ const resolvers = {
     async createGroup(instance, { group_name }, { user, GroupModel, logger }) {
       try {
         const group_id = `group-${uuidv4()}`;
-    
-        // const group = {
-        //   user_id: group_name,
-        //   created_at: `${Date.now()}`,
-        //   item_id: group_id,
-        //   users: [user.user_id],
-        // };
 
         const userToAdd = {
           user_id: user.user_id,
           item_id: group_id,
           group_name,
+          owner: true,
         };
         
         // Create group and then add member since they are the one creating it.
@@ -179,11 +164,21 @@ const resolvers = {
       }
     },
 
-    async joinGroup(instance, { group_id }, { user, UserModel, logger }) {
+    async joinGroup(instance, { item_id }, { user, GroupModel, StreakModel, logger }) {
       try {
-        const results = await UserModel.addMemberToGroup(user, group_id);
-        logger.info(`Added member: ${user.user_id} to group: ${group_id}`);
-        return results;
+        const {
+          Items: streak,
+        } = await StreakModel.getUserStreak(user.user_id);
+
+        const member = {
+          user_id: user.user_id,
+          item_id,
+          streak_id: streak[0].item_id,
+        };
+
+        await GroupModel.addMemberToGroup(member);
+        logger.info(`Added member: ${user.user_id} to group: ${item_id}`);
+        return '';
       } catch (err) {
         logger.error('ADD_MEMBER_TO_GROUP_ERROR', err);
         return err;

@@ -32,12 +32,11 @@
         "created_at": "1558147666013",
         "email": "email@email.com",
         "username": "Dj",
-        "group": "TEST",
         "password": "$2b$10$TcCu6H9G3x8/gd5jKCG5xee4REYrxwABOzoVeV5Dm4iiEKJzavV2G",
-        "role": "USER"
+        "role": ["USER"]
     },
     {
-        "score": 1,
+        "score": 2,
         "expiration": "1558249199",
         "streak": "STREAK",
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
@@ -47,6 +46,45 @@
     {
         "group_name": "FADS", 
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
-        "item_id": "group-760c118b-0999-42b1-94c3-de1788f87873"
+        "item_id": "group-760c118b-0999-42b1-94c3-de1788f87873",
+        "streak_id": "streak-f0344c44-b7dc-4032-a7f7-0606dbc20e5e"
+    },
+
+
+    {
+        "recurrence": "DAILY",
+        "created_at": "1558206953835",
+        "habit_name": "Great Habit My Dude",
+        "type": "Wow",
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "habit-16bfadf4-d8e6-4ad7-9286-446f6f440c4e"
+    }, 
+    {
+        "recurrence": "WEEKLY",
+        "created_at": "1558206967399",
+        "habit_name": "Second Best Habit My Dude",
+        "type": "Nice",
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "habit-c1423dc1-19fb-4f95-8ff1-beb0646d15f7"
+    }, 
+    {
+        "password": "$2b$10$o../71q.vQWl.F8jjbI/3O1WbvPYiLrjW9kRVQHfP4p42oE9x1Z.q",
+        "role": [
+            "USER"
+        ],
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "profile-97b8c7a7-7d69-4b9d-b18d-d37f93fa310d",
+        "created_at": "1558206906313",
+        "email": "email2@email.com",
+        "username": "DJ2"
+    }, 
+    {
+        "score": 1,
+        "expiration": "1558335599",
+        "streak": "STREAK",
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "streak-d8453ba2-c7cb-44cd-82b8-d0109b81c7d1",
+        "username": "DJ2"
     }
 ]
+

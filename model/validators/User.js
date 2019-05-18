@@ -4,6 +4,8 @@ const BaseValidator = require('./base');
 const GROUP_TYPES = {
   group_name: 'string',
   users: 'object',
+  owner: 'boolean',
+  streak_id: 'string',
 };
 
 const STREAK_TYPES = {
@@ -70,6 +72,8 @@ class UserValidator extends BaseValidator {
       'expiration',
       'group_name',
       'users',
+      'owner',
+      'streak_id',
     ];
   }
 }
