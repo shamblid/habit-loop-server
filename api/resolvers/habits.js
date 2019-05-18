@@ -12,6 +12,7 @@ const resolver = {
         }
 
         let habits;
+        let RedisClient;
 
         try {
           const results = await ctx.HabitModel.getUserHabits(ctx.user.user_id);
@@ -22,15 +23,18 @@ const resolver = {
         }
 
         try {
-          const completedHabits = await ctx.Redis.getCompletedHabits(ctx.user.user_id);
+          RedisClient = await ctx.Redis();
+          const completedHabits = await RedisClient.getCompletedHabits(ctx.user.user_id);
 
           habits = _.map(habits, habit => {
-            if (completedHabits.includes(habit.habit_id)) {
+            if (completedHabits.includes(habit.item_id)) {
               return Object.assign(habit, { completed_today: true });
             } return habit;
           });
         } catch (err) {
           ctx.logger.error(`Problem getting habits from cache: ${err}`);
+        } finally {
+          RedisClient.disconnect();
         }
 
         return habits;
@@ -71,6 +75,7 @@ const resolver = {
         const generatedInput = {
           habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
+          item_id: `habit-${uuidv4()}`,
           created_at: `${Date.now()}`,
         };
         
@@ -117,25 +122,29 @@ const resolver = {
         }
       },
 
-      async completeHabit(instance, { habit_id, recurrence }, ctx) {
+      async completeHabit(instance, { item_id, recurrence }, ctx) {
         const user_id = _.get(ctx, 'user.user_id');
         const username = _.get(ctx, 'user.username');
-        
-        ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${habit_id}.`);
+        let RedisClient;
+
+        ctx.logger.info(`Completing habit for user: ${user_id}, habit: ${item_id}.`);
         
         try {
+          RedisClient = await ctx.Redis();
           // find out if this is the first habit being completed today
-          const completed = await ctx.Redis.completedHabitToday(user_id);
+          const completed = await RedisClient.completedHabitToday(user_id);
 
           // make sure completeHabit makes an entry before adding to streak and events
-          await ctx.Redis.completeHabit(user_id, habit_id, recurrence);
+          await RedisClient.completeHabit(user_id, item_id, recurrence);
           if (completed === 0) { 
             ctx.StreakModel.upsert(user_id, username);
           }
           return 1;
         } catch (err) {
-          ctx.logger.error(`Error trying to complete habit ${habit_id} for user ${user_id}.`);
+          ctx.logger.error(`Error trying to complete habit ${item_id} for user ${user_id}.`);
           return err;
+        } finally {
+          RedisClient.disconnect();
         }
       },
     },

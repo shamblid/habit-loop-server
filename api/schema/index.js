@@ -21,7 +21,7 @@ const typeDefs = gql`
 		}
 		
 		type Query {
-					_empty: String
+			_empty: String
 		}
     
     type Mutation {

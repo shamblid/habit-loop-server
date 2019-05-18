@@ -3,6 +3,7 @@ const { gql } = require('apollo-server-lambda');
 const userDefs = gql`
 	extend type Query {
 		me: User
+		getUserStreak: Streak!
 		getTopStreaks: [Streak!]
 		getGroupLeaderboard: [Streak]
 	}

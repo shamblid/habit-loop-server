@@ -1,10 +1,12 @@
 const Redis = require('ioredis');
 const logger = require('pino')();
 const moment = require('moment');
+const _ = require('lodash');
 
-const redisConnect = () => (
+let client;
+
+const getConnection = () => (
     new Promise((resolve, reject) => {
-        logger.info(`Attempting to connect to redis host ${process.env.REDIS_HOST}.`);
         const redisClient = new Redis({
             host: process.env.REDIS_HOST,
             password: process.env.REDIS_PASSWORD,
@@ -12,27 +14,27 @@ const redisConnect = () => (
             connectTimeout: 2000,
         });
 
-        redisClient.on('connect', () => resolve(redisClient));
+        redisClient.on('connect', () => logger.info(`Redis client connected to host ${process.env.REDIS_HOST}`));
         redisClient.on('error', (err) => reject(err));
+        redisClient.on('close', () => logger.info('Closing connection!'));
+
+        return resolve(redisClient);
     })
 );
 
-const RedisModel = () => {
-    const getCompletedHabits = async (user_id) => {
-        try {
-            const client = await redisConnect();
-            const completedDailyHabits = await client.lrange(`${user_id}|DAILY`, 0, -1);
-            const completedWeeklyHabits = await client.lrange(`${user_id}|WEEKLY`, 0, -1);
+const Streak = {
+    
 
-            return [...completedDailyHabits, ...completedWeeklyHabits];
-        } catch (err) {
-            throw err;
-        }
-    };
+    getCompletedHabits: async (user_id) => {
+        const habits = await client.multi()
+            .lrange(`${user_id}|DAILY`, 0, -1)
+            .lrange(`${user_id}|WEEKLY`, 0, -1)
+            .exec();
+        
+        return [...habits[0][1], ...habits[1][1]];
+    },
 
-    const completeHabit = async (user_id, habit_id, recurrence) => {
-        const client = await redisConnect();
-
+    completeHabit: (user_id, habit_id, recurrence) => {
         if (recurrence === 'DAILY') {
             client.rpush(`${user_id}|DAILY`, habit_id);
 
@@ -47,23 +49,25 @@ const RedisModel = () => {
         }
 
         return 0;
-    };
+    },
 
-    const completedHabitToday = async (user_id) => {
-        try {
-            const client = await redisConnect();
-            return client.exists(`${user_id}|DAILY`);
-        } catch (err) {
-            logger.error(`Error checking for daily habit completion for user ${user_id} with error: ${err}.`);
-            return 1;
-        }
-    };
+    disconnect: () => {
+        return client.quit();
+    },
 
-    return {
-        getCompletedHabits,
-        completeHabit,
-        completedHabitToday,
-    };
+    completedHabitToday: (user_id) => client.exists(`${user_id}|DAILY`),
 };
 
-module.exports = RedisModel;
+module.exports = {
+    setConnection: connection => {
+        client = connection;
+    },
+
+    getConnection: () => {
+        if (_.isNil(client)) {
+            return getConnection();
+        } return client;
+    },
+
+    streak: Streak,
+};

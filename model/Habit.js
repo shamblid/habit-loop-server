@@ -1,12 +1,9 @@
-const AWS = require('aws-sdk');
 const _ = require('lodash');
-const logger = require('pino')();
-
-const HabitValidator = require('./validators/Habit');
+const User = require('./User');
 
 // item contains name, type, habit_id, user_id, created_at
 const createUpdate = (item) => {
-  const updateTypes = ['name', 'type', 'recurrence'];
+  const updateTypes = ['habit_name', 'type', 'recurrence'];
 
   const types = _.pick(item, updateTypes);
 
@@ -28,25 +25,7 @@ const createUpdate = (item) => {
   return [UpdateExpression, ExpressionAttributeValues, ExpressionAttributeNames];
 };
 
-class Habit {
-  constructor() {
-    this.tableName = process.env.HABIT_TABLE;
-
-    // Set AWS configs for tests if we have a local db
-    // Might be able to remove this with servless local dynamodb plugin
-    if (process.env.NODE_ENV === 'test') {
-      AWS.config.update({
-        region: 'us-east-1',
-        endpoint: 'http://localhost:8000',
-      });
-    }
-
-
-    this.logger = logger;
-    this.docClient = new AWS.DynamoDB.DocumentClient();
-    this.validator = new HabitValidator();
-  }
-
+class Habit extends User {
   /**
    * Get the list of habits for a specific user
    *
@@ -56,10 +35,10 @@ class Habit {
   getUserHabits(userId) {
     const params = {
       TableName: this.tableName,
-      IndexName: 'UserIndex',
-      KeyConditionExpression: 'user_id = :u',
+      KeyConditionExpression: 'user_id = :u AND begins_with(item_id, :h)',
       ExpressionAttributeValues: {
         ':u': userId,
+        ':h': 'habit',
       },
     };
 
@@ -121,12 +100,12 @@ class Habit {
       ExpressionAttributeValues, 
       ExpressionAttributeNames,
     ] = createUpdate(habit);
-    
+
     const params = {
       TableName: this.tableName,
       Key: {
-        habit_id: habit.habit_id,
-        created_at: habit.created_at,
+        item_id: habit.item_id,
+        user_id: habit.user_id,
       },
       UpdateExpression,
       ExpressionAttributeValues,

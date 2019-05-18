@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
-const uuid = require('uuid/v4');
+const uuidv4 = require('uuid/v4');
 const _ = require('lodash');
 
 const JWT_SECRET = 'supersecret';
@@ -52,6 +52,18 @@ const resolvers = {
         return err;
       }
     },
+
+    async getUserStreak(instance, args, { user, logger, StreakModel }) {
+      try {
+        const {
+          Items: streakData,
+        } = await StreakModel.getUserStreak(user.user_id);
+        return streakData;
+      } catch (err) {
+        logger.error(`Problem getting user streak: ${err}`);
+        return err;
+      }
+    },
   },
   
   Mutation: {
@@ -65,9 +77,10 @@ const resolvers = {
         } = args.input;
 
         const user = {
-          user_id: uuid(),
+          user_id: uuidv4(),
           username,
           email,
+          item_id: `profile-${uuidv4()}`,
           created_at: `${Date.now()}`,
           role: ['USER'],
           password: await bcrypt.hash(password, 10),

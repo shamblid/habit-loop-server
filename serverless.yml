@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   profile: serverless
-  stage: dev
+  stage: dev-2
   region: us-east-1
   tracing:
     lambda: true
@@ -32,8 +32,6 @@ provider:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}/index/*"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}/index/*"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}/index/*"
 
 functions:
   graphql:
@@ -56,12 +54,12 @@ functions:
           method: get
 
 plugins:
+  - serverless-dynamodb-local
   - serverless-offline
 
 resources:
   - ${file(resources/dynamo/UserTable.yml)}
   - ${file(resources/dynamo/HabitTable.yml)}
-  - ${file(resources/dynamo/StreakTable.yml)}
 
 custom:
   config:
@@ -69,3 +67,12 @@ custom:
     USER_TABLE: user-records-${self:provider.stage}
     EVENT_TABLE: event-records-${self:provider.stage}
     STREAK_TABLE: streak-records-${self:provider.stage}
+  dynamodb:
+      start:
+        migrate: true
+        seed: false
+      seed:
+        test:
+          sources:
+            - table: user-records-dev-2
+              sources: [./resources/test_data.json]

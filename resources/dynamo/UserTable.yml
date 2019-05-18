@@ -7,7 +7,7 @@ Resources:
           AttributeName: user_id
           AttributeType: S
         -
-          AttributeName: created_at
+          AttributeName: item_id
           AttributeType: S
         -
           AttributeName: email
@@ -31,7 +31,7 @@ Resources:
           AttributeName: user_id
           KeyType: HASH
         -
-          AttributeName: created_at
+          AttributeName: item_id
           KeyType: RANGE
 
       ProvisionedThroughput:
@@ -46,7 +46,7 @@ Resources:
               AttributeName: email
               KeyType: HASH
             -
-              AttributeName: created_at
+              AttributeName: item_id
               KeyType: RANGE
 
           Projection:

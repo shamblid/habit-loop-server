@@ -7,9 +7,9 @@ const typeDefs = require('./schema');
 const schemaDirectives = require('./directives');
 const UserModel = require('@userModel');
 const HabitModel = require('@habitModel');
-const RedisModel = require('../model/Redis');
-const EventModel = require('../model/Event');
 const StreakModel = require('../model/Streak');
+const RedisModel = require('../model/Redis');
+const GroupModel = require('../model/Group');
 
 const getAuth = headers => {
   const token = _.get(headers, 'Authorization', null);
@@ -26,6 +26,12 @@ const getAuth = headers => {
   }
 };
 
+const getRedisModel = async () => {
+  const connection = await RedisModel.getConnection();
+  RedisModel.setConnection(connection);
+  return RedisModel.streak;
+};
+
 module.exports = {
   resolvers,
   typeDefs,
@@ -34,11 +40,11 @@ module.exports = {
     logger,
     context,
     user: getAuth(event.headers),
-    HabitModel: new HabitModel(),
     UserModel: new UserModel(),
-    EventModel: new EventModel(),
     StreakModel: new StreakModel(),
-    Redis: RedisModel(),
+    HabitModel: new HabitModel(),
+    GroupModel: new GroupModel(),
+    Redis: getRedisModel,
   }),
   formatResponse: (response) => {
     logger.info(response);
