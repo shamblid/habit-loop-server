@@ -1,3 +1,52 @@
-{
-    
-}
+[
+    {
+        "recurrence": "WEEKLY",
+        "created_at": "1558148601252",
+        "habit_name": "AsdfasdfFFFF",
+        "type": "Fdsafdsa",
+        "item_id": "habit-01b9bb9a-9e5d-4ca8-ad96-d8a21334a2ba",
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc"
+
+    },
+    {
+        "recurrence": "DAILY",
+        "created_at": "1558147732535",
+        "habit_name": "Asdf",
+        "type": "Fdsa",
+        "item_id": "habit-133395a3-f109-40cd-ae76-f2cfb6d5c88b",
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc"
+
+    },
+    {
+        "recurrence": "WEEKLY",
+        "created_at": "1558148223072",
+        "habit_name": "Asdasd",
+        "type": "Dsadsa",
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
+        "item_id": "habit-5888f690-805c-43e9-b2be-787e380ab57f"
+
+    },
+    {
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
+        "item_id": "profile-f369169d-ca24-4afe-92cb-26d44ed2e17c",
+        "created_at": "1558147666013",
+        "email": "email@email.com",
+        "username": "Dj",
+        "group": "TEST",
+        "password": "$2b$10$TcCu6H9G3x8/gd5jKCG5xee4REYrxwABOzoVeV5Dm4iiEKJzavV2G",
+        "role": "USER"
+    },
+    {
+        "score": 1,
+        "expiration": "1558249199",
+        "streak": "STREAK",
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
+        "item_id": "streak-f0344c44-b7dc-4032-a7f7-0606dbc20e5e",
+        "username": "Dj"
+    },
+    {
+        "group_name": "FADS", 
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
+        "item_id": "group-760c118b-0999-42b1-94c3-de1788f87873"
+    }
+]

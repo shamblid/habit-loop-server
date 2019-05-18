@@ -73,7 +73,6 @@ const resolver = {
         const input = _.get(args, 'input');
     
         const generatedInput = {
-          habit_id: uuidv4(),
           user_id: _.get(ctx, 'user.user_id'),
           item_id: `habit-${uuidv4()}`,
           created_at: `${Date.now()}`,

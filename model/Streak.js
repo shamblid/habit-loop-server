@@ -88,7 +88,7 @@ class Streak extends User {
         ScanIndexForward: false,
         Limit,
       };
-
+      
       return this.docClient.query(params).promise();
   }
 }

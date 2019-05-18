@@ -48,7 +48,7 @@ class User {
     const params = {
       TableName: this.tableName,
       KeyConditionExpression: '#user = :user',
-      expressionAttributeNames: {
+      ExpressionAttributeNames: {
         '#user': 'user',
       },
       ExpressionAttributeValues: {

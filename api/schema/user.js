@@ -12,7 +12,8 @@ const userDefs = gql`
 		signup(input: SignupInput!): String
 		login(email: String!, password: String!): String
 		registerPushNotification(token: String! reminder: Reminder): String @requireAuth(role: USER)
-		addMemberToGroup(group: String!): String
+		createGroup(group_name: String!): String
+		joinGroup(item_id: String!): String
 	} 
 
 	input SignupInput {
@@ -35,6 +36,11 @@ const userDefs = gql`
 		username: String
 		user_id: String
 		score: Int
+	}
+
+	type Group {
+		group_name: String!
+		users: [String]
 	}
 `;
 

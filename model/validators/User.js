@@ -1,6 +1,11 @@
 const _ = require('lodash');
 const BaseValidator = require('./base');
 
+const GROUP_TYPES = {
+  group_name: 'string',
+  users: 'object',
+};
+
 const STREAK_TYPES = {
   score: 'number',
   streak: 'string',
@@ -9,7 +14,7 @@ const STREAK_TYPES = {
 
 const HABIT_TYPES = {
   habit_name: 'string',
-  type: 'object',
+  type: 'string',
   notify: 'object',
   priority: 'string',
   completed_today: 'boolean',
@@ -36,7 +41,7 @@ const BASE_TYPES = {
 class UserValidator extends BaseValidator {
   constructor() {
     super();
-    this.PARAM_TYPES = _.merge(BASE_TYPES, USER_TYPES, HABIT_TYPES, STREAK_TYPES);
+    this.PARAM_TYPES = _.merge(BASE_TYPES, USER_TYPES, HABIT_TYPES, STREAK_TYPES, GROUP_TYPES);
 
     /**
      * Fields allowed during Creation
@@ -63,6 +68,8 @@ class UserValidator extends BaseValidator {
       'score',
       'streak',
       'expiration',
+      'group_name',
+      'users',
     ];
   }
 }
