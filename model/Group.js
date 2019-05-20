@@ -28,15 +28,28 @@ class Group extends User {
     return this.docClient.put(params).promise();
   }
 
-  addMemberToGroup(member) {
-    this.validator.check(member);
+  addMemberToGroup(user) {
+    this.validator.check(user);
     
     const params = {
       TableName: this.tableName,
-      Item: member,
+      Item: user,
     };
 
     return this.docClient.put(params).promise();
+  }
+
+  getUserGroups(user_id) {
+    const params = {
+      TableName: this.tableName,
+      KeyConditionExpression: 'user_id = :u AND begins_with(item_id, :g)',
+      ExpressionAttributeValues: {
+        ':u': user_id,
+        ':g': 'group',
+      },
+    };
+
+    return this.docClient.query(params).promise();
   }
 
   getUsersInGroups(groups = 'group-760c118b-0999-42b1-94c3-de1788f87873') {
@@ -45,7 +58,7 @@ class Group extends User {
       IndexName: 'ItemIndex',
       KeyConditionExpression: 'item_id = :i',
       ExpressionAttributeValues: {
-        ':i': 'group-760c118b-0999-42b1-94c3-de1788f87873',
+        ':i': groups,
       },
     };
 

@@ -126,7 +126,7 @@ class User {
     return this.docClient.update(params).promise();
   }
 
-  getAllUsers() {
+  async getAll() {
     const params = {
       TableName: this.tableName,
     };

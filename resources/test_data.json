@@ -1,12 +1,81 @@
 [
     {
         "recurrence": "WEEKLY",
+        "created_at": "1558211943726",
+        "habit_name": "Asdfasdf",
+        "type": "Fsafsda",
+        "user_id": "b7efc957-9a88-44d3-b924-47f682cde869",
+        "item_id": "habit-2ceb15e0-2759-4a72-8976-44c599da5655"
+    },
+    {
+        "password": "$2b$10$Dn/Mb9NGvzyC.Y95VUN6U.P5Wkqa/aYdWsuecz8bWuIFLAR8OYY0.",
+        "role": ["USER"],
+        "user_id": "b7efc957-9a88-44d3-b924-47f682cde869",
+        "item_id": "profile-51905da0-68af-481e-888b-aaa12ded9c9c",
+        "created_at": "1558211933647",
+        "email": "email1@email.com",
+        "username": "SUPER_COOL_GUY"
+    },
+    {
+        "score": 1,
+        "expiration": "1558335599",
+        "streak": "STREAK",
+        "user_id": "b7efc957-9a88-44d3-b924-47f682cde869",
+        "item_id": "streak-da4ddd33-0f71-4e42-9357-455453f4f25c",
+        "username": "SUPER_COOL_GUY"
+    },
+    {
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "group-760c118b-0999-42b1-94c3-de1788f87873",
+        "streak_id": "streak-d8453ba2-c7cb-44cd-82b8-d0109b81c7d1",
+        "group_name": "FADS"
+    },
+    {
+        "recurrence": "DAILY",
+        "created_at": "1558206953835",
+        "habit_name": "Great Habit My Dude",
+        "type": "Wow",
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "habit-16bfadf4-d8e6-4ad7-9286-446f6f440c4e"
+    },
+    {
+        "recurrence": "WEEKLY",
+        "created_at": "1558206967399",
+        "habit_name": "Second Best Habit My Dude",
+        "type": "Nice",
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "habit-c1423dc1-19fb-4f95-8ff1-beb0646d15f7"
+    },
+    {
+        "password": "$2b$10$o../71q.vQWl.F8jjbI/3O1WbvPYiLrjW9kRVQHfP4p42oE9x1Z.q",
+        "role": ["USER"],
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "profile-97b8c7a7-7d69-4b9d-b18d-d37f93fa310d",
+        "created_at": "1558206906313",
+        "email": "email2@email.com",
+        "username": "DJ2"
+    },
+    {
+        "score": 3,
+        "expiration": "1558335599",
+        "streak": "STREAK",
+        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
+        "item_id": "streak-d8453ba2-c7cb-44cd-82b8-d0109b81c7d1",
+        "username": "DJ2"
+    },
+    {
+        "streak_id": "streak-f0344c44-b7dc-4032-a7f7-0606dbc20e5e",
+        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
+        "item_id": "group-760c118b-0999-42b1-94c3-de1788f87873",
+        "group_name": "FADS"
+    },
+    {
+        "recurrence": "WEEKLY",
         "created_at": "1558148601252",
         "habit_name": "AsdfasdfFFFF",
         "type": "Fdsafdsa",
         "item_id": "habit-01b9bb9a-9e5d-4ca8-ad96-d8a21334a2ba",
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc"
-
     },
     {
         "recurrence": "DAILY",
@@ -15,7 +84,6 @@
         "type": "Fdsa",
         "item_id": "habit-133395a3-f109-40cd-ae76-f2cfb6d5c88b",
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc"
-
     },
     {
         "recurrence": "WEEKLY",
@@ -24,16 +92,15 @@
         "type": "Dsadsa",
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
         "item_id": "habit-5888f690-805c-43e9-b2be-787e380ab57f"
-
     },
     {
+        "password": "$2b$10$TcCu6H9G3x8/gd5jKCG5xee4REYrxwABOzoVeV5Dm4iiEKJzavV2G",
+        "role": ["USER"],
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
         "item_id": "profile-f369169d-ca24-4afe-92cb-26d44ed2e17c",
         "created_at": "1558147666013",
         "email": "email@email.com",
-        "username": "Dj",
-        "password": "$2b$10$TcCu6H9G3x8/gd5jKCG5xee4REYrxwABOzoVeV5Dm4iiEKJzavV2G",
-        "role": ["USER"]
+        "username": "Dj"
     },
     {
         "score": 2,
@@ -42,49 +109,5 @@
         "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
         "item_id": "streak-f0344c44-b7dc-4032-a7f7-0606dbc20e5e",
         "username": "Dj"
-    },
-    {
-        "group_name": "FADS", 
-        "user_id": "d2fb07d2-d870-4021-967f-ac9bc778e2fc",
-        "item_id": "group-760c118b-0999-42b1-94c3-de1788f87873",
-        "streak_id": "streak-f0344c44-b7dc-4032-a7f7-0606dbc20e5e"
-    },
-
-
-    {
-        "recurrence": "DAILY",
-        "created_at": "1558206953835",
-        "habit_name": "Great Habit My Dude",
-        "type": "Wow",
-        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
-        "item_id": "habit-16bfadf4-d8e6-4ad7-9286-446f6f440c4e"
-    }, 
-    {
-        "recurrence": "WEEKLY",
-        "created_at": "1558206967399",
-        "habit_name": "Second Best Habit My Dude",
-        "type": "Nice",
-        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
-        "item_id": "habit-c1423dc1-19fb-4f95-8ff1-beb0646d15f7"
-    }, 
-    {
-        "password": "$2b$10$o../71q.vQWl.F8jjbI/3O1WbvPYiLrjW9kRVQHfP4p42oE9x1Z.q",
-        "role": [
-            "USER"
-        ],
-        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
-        "item_id": "profile-97b8c7a7-7d69-4b9d-b18d-d37f93fa310d",
-        "created_at": "1558206906313",
-        "email": "email2@email.com",
-        "username": "DJ2"
-    }, 
-    {
-        "score": 1,
-        "expiration": "1558335599",
-        "streak": "STREAK",
-        "user_id": "22781ebe-a81a-424f-b6d0-a95dc1df7d45",
-        "item_id": "streak-d8453ba2-c7cb-44cd-82b8-d0109b81c7d1",
-        "username": "DJ2"
     }
 ]
-

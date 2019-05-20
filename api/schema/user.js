@@ -5,7 +5,8 @@ const userDefs = gql`
 		me: User
 		getUserStreak: Streak!
 		getTopStreaks: [Streak!]
-		getGroupLeaderboard: [Streak]
+		getGroupLeaderboard(item_id: String!): [Streak]
+		getUserGroups: [Group]
 	}
 	
 	extend type Mutation {
@@ -40,7 +41,7 @@ const userDefs = gql`
 
 	type Group {
 		group_name: String!
-		users: [String]
+		item_id: String!
 	}
 `;
 

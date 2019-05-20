@@ -40,6 +40,9 @@ const BASE_TYPES = {
   item_id: 'string',
 };
 
+const types = [BASE_TYPES, USER_TYPES, HABIT_TYPES, STREAK_TYPES, GROUP_TYPES];
+
+
 class UserValidator extends BaseValidator {
   constructor() {
     super();
@@ -49,32 +52,7 @@ class UserValidator extends BaseValidator {
      * Fields allowed during Creation
      * State is interpreted by creation, since we're creating it was present and therefore active.
      * */
-    this.ALLOWED_PARAMS = [
-      'habit_name',
-      'type',
-      'notify',
-      'priority',
-      'completed_today',
-      'recurrence',
-      'user_id',
-      'username',
-      'email',
-      'password',
-      'group',
-      'role',
-      'created_at',
-      'push_token',
-      'timestamp',
-      'reminder',
-      'item_id',
-      'score',
-      'streak',
-      'expiration',
-      'group_name',
-      'users',
-      'owner',
-      'streak_id',
-    ];
+    this.ALLOWED_PARAMS = _.reduce(types, (prev, curr) => (_.concat(prev, Object.keys(curr))), []);
   }
 }
 

@@ -34,7 +34,7 @@ const resolvers = {
       try {
         const {
           Items: users,
-        } = await GroupModel.getUsersInGroups();
+        } = await GroupModel.getUsersInGroups(group_id);
 
         const streaks = await StreakModel.getUsers(users);
         return streaks;
@@ -52,6 +52,19 @@ const resolvers = {
         return streakData[0];
       } catch (err) {
         logger.error(`Problem getting user streak: ${err}`);
+        return err;
+      }
+    },
+
+    async getUserGroups(instance, args, { user, GroupModel, logger }) {
+      try {
+        const {
+          Items: groupData,
+        } = await GroupModel.getUserGroups(user.user_id);
+
+        return groupData;
+      } catch (err) {
+        logger.error(`Problem getting user groups: ${err}`);
         return err;
       }
     },
@@ -164,7 +177,7 @@ const resolvers = {
       }
     },
 
-    async joinGroup(instance, { item_id }, { user, GroupModel, StreakModel, logger }) {
+    async joinGroup(instance, { item_id, group_name }, { user, GroupModel, StreakModel, logger }) {
       try {
         const {
           Items: streak,
@@ -174,6 +187,7 @@ const resolvers = {
           user_id: user.user_id,
           item_id,
           streak_id: streak[0].item_id,
+          group_name,
         };
 
         await GroupModel.addMemberToGroup(member);
