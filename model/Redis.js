@@ -23,8 +23,6 @@ const getConnection = () => (
 );
 
 const Streak = {
-    
-
     getCompletedHabits: async (user_id) => {
         const habits = await client.multi()
             .lrange(`${user_id}|DAILY`, 0, -1)
