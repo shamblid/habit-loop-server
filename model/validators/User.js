@@ -6,6 +6,7 @@ const GROUP_TYPES = {
   users: 'object',
   owner: 'boolean',
   streak_id: 'string',
+  group_sort: 'string',
 };
 
 const STREAK_TYPES = {

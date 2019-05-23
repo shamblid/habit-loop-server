@@ -22,22 +22,25 @@ const resolvers = {
 
     async getTopStreaks(instance, args, { StreakModel, logger }) {
       try {
-        const result = await StreakModel.getTopStreaks();
-        return result.Items;
+        const {
+          Items: streaks,
+        } = await StreakModel.getTopStreaks();
+        return streaks;
       } catch (err) {
         logger.error(`Error getting top streaks: ${err}.`);
         throw err;
       }
     },
 
-    async getGroupLeaderboard(instance, { group_id }, { StreakModel, GroupModel, logger }) {
+    async getGroupLeaderboard(instance, { item_id: group_id }, { StreakModel, GroupModel, logger }) {
       try {
         const {
           Items: users,
-        } = await GroupModel.getUsersInGroups(group_id);
+        } = await GroupModel.getUsersInGroup(group_id);
 
-        const streaks = await StreakModel.getUsers(users);
-        return streaks;
+        const streaks = await Promise.all(_.map(users, user => StreakModel.getUserStreak(user.user_id)));
+        
+        return streaks.reduce((prev, streak) => [...prev, ...streak.Items], []);
       } catch (err) {
         logger.error(err);
         return err;
@@ -61,10 +64,24 @@ const resolvers = {
         const {
           Items: groupData,
         } = await GroupModel.getUserGroups(user.user_id);
+        const groups = groupData.filter(group => group.item_id !== 'group');
+
+        return groups;
+      } catch (err) {
+        logger.error(`Problem getting user groups: ${err}`);
+        return err;
+      }
+    },
+
+    async getAllGroups(instance, args, { GroupModel, logger }) {
+      try {
+        const {
+          Items: groupData,
+        } = await GroupModel.getAllGroups();
 
         return groupData;
       } catch (err) {
-        logger.error(`Problem getting user groups: ${err}`);
+        logger.error(`Problem getting all groups: ${err}`);
         return err;
       }
     },
@@ -167,9 +184,16 @@ const resolvers = {
           group_name,
           owner: true,
         };
+
+        const groupToAdd = {
+          user_id: group_id,
+          item_id: 'group', // this will be used to query by this sort key to find all groups
+          group_name,
+          owner: user.user_id,
+        };
         
         // Create group and then add member since they are the one creating it.
-        await GroupModel.createGroup(userToAdd);
+        await GroupModel.createGroup(userToAdd, groupToAdd);
         return group_name;
       } catch (err) {
         logger.error(`There was a problem creating a group: ${err}`);
@@ -177,22 +201,17 @@ const resolvers = {
       }
     },
 
-    async joinGroup(instance, { item_id, group_name }, { user, GroupModel, StreakModel, logger }) {
+    async joinGroup(instance, { item_id, group_name }, { user, GroupModel, logger }) {
       try {
-        const {
-          Items: streak,
-        } = await StreakModel.getUserStreak(user.user_id);
-
         const member = {
           user_id: user.user_id,
           item_id,
-          streak_id: streak[0].item_id,
           group_name,
         };
 
         await GroupModel.addMemberToGroup(member);
-        logger.info(`Added member: ${user.user_id} to group: ${item_id}`);
-        return '';
+        logger.info(`Added member: ${user.user_id} to group: ${group_name}`);
+        return group_name;
       } catch (err) {
         logger.error('ADD_MEMBER_TO_GROUP_ERROR', err);
         return err;

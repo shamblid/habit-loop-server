@@ -40,7 +40,6 @@ class Streak extends User {
       },
     };
 
-
     const {
       Responses: table,
     } = await this.docClient.batchGet(params).promise();

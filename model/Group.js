@@ -17,15 +17,36 @@ const createGroupQuery = (groups = ['TEST', 'TEST1', 'TEST2']) => {
 };
 
 class Group extends User {
-  createGroup(user) {
+  /**
+   * Adds two rows: one for the user to specify the group
+   *                two for the group itself and to specify the user being the owner
+   * @param { Object } 
+   * @param user containing details on the user making the group
+   * @param group containing details on the group itself
+   * @return Promise containing dynamodb action
+   */
+  createGroup(user, group) {
     this.validator.check(user);
+    this.validator.check(group);
 
     const params = {
-      TableName: this.tableName,
-      Item: user,
+      RequestItems: {
+        [this.tableName]: [
+          {
+            PutRequest: {
+              Item: user,
+            },
+          },
+          {
+            PutRequest: {
+              Item: group,
+            },
+          },
+        ],
+      },
     };
 
-    return this.docClient.put(params).promise();
+    return this.docClient.batchWrite(params).promise();
   }
 
   addMemberToGroup(user) {
@@ -48,17 +69,30 @@ class Group extends User {
         ':g': 'group',
       },
     };
-
+    
     return this.docClient.query(params).promise();
   }
 
-  getUsersInGroups(groups = 'group-760c118b-0999-42b1-94c3-de1788f87873') {
+  getUsersInGroup(group) {
     const params = {
       TableName: this.tableName,
       IndexName: 'ItemIndex',
       KeyConditionExpression: 'item_id = :i',
       ExpressionAttributeValues: {
-        ':i': groups,
+        ':i': group,
+      },
+    };
+
+    return this.docClient.query(params).promise();
+  }
+
+  getAllGroups() {
+    const params = {
+      TableName: this.tableName,
+      IndexName: 'ItemIndex',
+      KeyConditionExpression: 'item_id = :g',
+      ExpressionAttributeValues: {
+        ':g': 'group',
       },
     };
 
