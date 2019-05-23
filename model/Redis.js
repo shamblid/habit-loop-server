@@ -69,5 +69,7 @@ module.exports = {
         } return client;
     },
 
+    disconnect: () => client.quit(),
+
     streak: Streak,
 };

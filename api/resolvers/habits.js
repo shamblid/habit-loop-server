@@ -33,8 +33,6 @@ const resolver = {
           });
         } catch (err) {
           ctx.logger.error(`Problem getting habits from cache: ${err}`);
-        } finally {
-          RedisClient.disconnect();
         }
 
         return habits;
@@ -142,8 +140,6 @@ const resolver = {
         } catch (err) {
           ctx.logger.error(`Error trying to complete habit ${item_id} for user ${user_id}.`);
           return err;
-        } finally {
-          RedisClient.disconnect();
         }
       },
     },

@@ -26,12 +26,6 @@ const getAuth = headers => {
   }
 };
 
-const getRedisModel = async () => {
-  const connection = await RedisModel.getConnection();
-  RedisModel.setConnection(connection);
-  return RedisModel.streak;
-};
-
 module.exports = {
   resolvers,
   typeDefs,
@@ -44,7 +38,7 @@ module.exports = {
     StreakModel: new StreakModel(),
     HabitModel: new HabitModel(),
     GroupModel: new GroupModel(),
-    Redis: getRedisModel,
+    Redis: RedisModel.streak,
   }),
   formatResponse: (response) => {
     logger.info(response);
