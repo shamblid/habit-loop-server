@@ -31,16 +31,18 @@ module.exports = {
   resolvers,
   typeDefs,
   schemaDirectives,
-  context: async ({ event, context }) => ({
-    logger,
-    context,
-    user: getAuth(event.headers),
-    UserModel: new UserModel(),
-    StreakModel: new StreakModel(),
-    HabitModel: new HabitModel(),
-    GroupModel: new GroupModel(),
-    Redis: RedisModel.streak,
-  }),
+  context: async ({ event, context }) => {
+    return {
+      logger,
+      context,
+      user: getAuth(event.headers),
+      UserModel: new UserModel(),
+      StreakModel: new StreakModel(),
+      HabitModel: new HabitModel(),
+      GroupModel: new GroupModel(),
+      Redis: RedisModel,
+    };
+  },
   // cache: new RedisCache({
   //   connectTimeout: 5000,
   //   reconnectOnError: function (err) {
