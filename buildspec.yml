@@ -8,4 +8,5 @@ phases:
       - npm install -g serverless
   build:
     commands:
+      - serverless config credentials --provider $AWS_ACCESS_KEY_ID --key AWS_SECRET_ACCESS_KEY
       - NODE_ENV=dev serverless deploy | tee deploy.out
