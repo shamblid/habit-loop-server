@@ -3,7 +3,6 @@ service: habit-api
 provider:
   name: aws
   runtime: nodejs8.10
-  profile: serverless
   stage: dev
   region: us-east-1
   tracing:
