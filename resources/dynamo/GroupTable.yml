@@ -7,7 +7,7 @@ Resources:
           AttributeName: user_id
           AttributeType: S
         -
-          AttributeName: item_id
+          AttributeName: created_at
           AttributeType: S
         -
           AttributeName: email
@@ -18,12 +18,6 @@ Resources:
         -
           AttributeName: reminder
           AttributeType: S
-        -
-          AttributeName: streak
-          AttributeType: S
-        -
-          AttributeName: score
-          AttributeType: N
 
 
       KeySchema:
@@ -31,7 +25,7 @@ Resources:
           AttributeName: user_id
           KeyType: HASH
         -
-          AttributeName: item_id
+          AttributeName: created_at
           KeyType: RANGE
 
       ProvisionedThroughput:
@@ -46,7 +40,7 @@ Resources:
               AttributeName: email
               KeyType: HASH
             -
-              AttributeName: item_id
+              AttributeName: created_at
               KeyType: RANGE
 
           Projection:
@@ -69,41 +63,5 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
-        
-        -
-          IndexName: StreakIndex
-          KeySchema:
-            -
-              AttributeName: streak
-              KeyType: HASH
-            -
-              AttributeName: score
-              KeyType: RANGE      
-
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
-
-        -
-          IndexName: ItemIndex
-          KeySchema:
-            -
-              AttributeName: item_id
-              KeyType: HASH
-            -
-              AttributeName: user_id
-              KeyType: RANGE      
-
-          Projection:
-            ProjectionType: ALL
-          ProvisionedThroughput:
-            ReadCapacityUnits: 5
-            WriteCapacityUnits: 5
-
-      TimeToLiveSpecification:
-        Enabled: True
-        AttributeName: expiration
       
       TableName: ${self:custom.config.USER_TABLE}

@@ -5,13 +5,13 @@
   "main": "app.js",
   "scripts": {
     "start": "set NODE_ENV=test&& node app.js",
-    "test": "export NODE_ENV=test && export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha",
-    "postinstall": "link-module-alias"
+    "test": "export NODE_ENV=test && export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-server-cache-redis": "^0.4.0",
     "apollo-server-lambda": "^2.4.8",
     "aws-sdk": "^2.361.0",
     "bcrypt": "^3.0.5",
@@ -32,16 +32,16 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "graphql-tools": "^4.0.3",
+    "jest": "^24.7.1",
+    "jest-cli": "^24.7.1",
     "link-module-alias": "^1.1.6",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
-    "jest": "^24.7.1",
-    "jest-cli": "^24.7.1",
     "pino-pretty": "^2.6.0",
+    "serverless-dynamodb-local": "^0.2.37",
     "serverless-offline": "^3.31.3",
     "sinon": "^7.1.1",
-    "supertest": "^3.3.0",
-    "serverless-dynamodb-local": "^0.2.37"
+    "supertest": "^3.3.0"
   },
   "_moduleAliases": {
     "@lib": "lib",

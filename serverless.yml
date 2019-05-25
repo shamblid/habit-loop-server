@@ -3,17 +3,13 @@ service: habit-api
 provider:
   name: aws
   runtime: nodejs8.10
-  profile: serverless
   stage: dev
   region: us-east-1
   tracing:
     lambda: true
   environment:
     NODE_ENV: ${env:NODE_ENV}
-    HABIT_TABLE: ${self:custom.config.HABIT_TABLE}
     USER_TABLE: ${self:custom.config.USER_TABLE}
-    EVENT_TABLE: ${self:custom.config.EVENT_TABLE}
-    STREAK_TABLE: ${self:custom.config.STREAK_TABLE}
     REDIS_HOST: "redis-17149.c14.us-east-1-2.ec2.cloud.redislabs.com"
     REDIS_PASSWORD: ${ssm:habit_loop_redis_password}
   iamRoleStatements:
@@ -26,17 +22,11 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:UpdateTable
+        - dynamodb:BatchWriteItem
         - dynamodb:DescribeTimeToLive
       Resource: 
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.HABIT_TABLE}/index/*"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}"
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}/index/*"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}/index/*"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.EVENT_TABLE}/stream/*"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}"
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.STREAK_TABLE}/index/*"
 
 functions:
   graphql:
@@ -59,17 +49,21 @@ functions:
           method: get
 
 plugins:
+  # - serverless-dynamodb-local
   - serverless-offline
 
 resources:
   - ${file(resources/dynamo/UserTable.yml)}
-  - ${file(resources/dynamo/HabitTable.yml)}
-  - ${file(resources/dynamo/EventTable.yml)}
-  - ${file(resources/dynamo/StreakTable.yml)}
 
 custom:
   config:
-    HABIT_TABLE: habit-records-${self:provider.stage}
     USER_TABLE: user-records-${self:provider.stage}
-    EVENT_TABLE: event-records-${self:provider.stage}
-    STREAK_TABLE: streak-records-${self:provider.stage}
+  dynamodb:
+      start:
+        migrate: false
+        seed: false
+      seed:
+        test:
+          sources:
+            - table: user-records-dev-2
+              sources: [./resources/test_data.json]
