@@ -5,11 +5,6 @@ const RedisModel = require('./model/Redis');
 
 const server = new ApolloServer(api);
 
-const runApollo = (event, context, apollo) => new Promise((resolve, reject) => {
-  const callback = (error, body) => (error ? reject(error) : resolve(body));
-  apollo(event, context, callback);
-});
-
 exports.graphql = async (event, context, callback) => {
   const connection = await RedisModel();
   context.callbackWaitsForEmptyEventLoop = false;
