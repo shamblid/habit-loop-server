@@ -3,13 +3,19 @@ const { gql } = require('apollo-server-lambda');
 const userDefs = gql`
 	extend type Query {
 		me: User
+		getUserStreak: Streak!
 		getTopStreaks: [Streak!]
+		getGroupLeaderboard(item_id: String!): [Streak]
+		getUserGroups: [Group]
+		getAllGroups: [Group]
 	}
 	
 	extend type Mutation {
 		signup(input: SignupInput!): String
 		login(email: String!, password: String!): String
-		registerPushNotification(token: String! reminder: Reminder): String @requireAuth(role: USER)
+		registerPushNotification(token: String!, reminder: Reminder): String @requireAuth(role: USER)
+		createGroup(group_name: String!): String
+		joinGroup(item_id: String!, group_name: String!): String
 	} 
 
 	input SignupInput {
@@ -32,6 +38,12 @@ const userDefs = gql`
 		username: String
 		user_id: String
 		score: Int
+	}
+
+	type Group {
+		group_name: String!
+		item_id: String!
+		user_id: String! 
 	}
 `;
 

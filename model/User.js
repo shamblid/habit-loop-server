@@ -48,7 +48,7 @@ class User {
     const params = {
       TableName: this.tableName,
       KeyConditionExpression: '#user = :user',
-      expressionAttributeNames: {
+      ExpressionAttributeNames: {
         '#user': 'user',
       },
       ExpressionAttributeValues: {
@@ -56,7 +56,7 @@ class User {
       },
     };
 
-    return this.docClient.query(params).promise();
+     return this.docClient.query(params).promise();
   }
 
   /**
@@ -90,7 +90,7 @@ class User {
    */
   create(user) {
     this.validator.check(user);
-
+    
     const params = {
       TableName: this.tableName,
       Item: user,
@@ -126,7 +126,7 @@ class User {
     return this.docClient.update(params).promise();
   }
 
-  getAllUsers() {
+  async getAll() {
     const params = {
       TableName: this.tableName,
     };

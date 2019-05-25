@@ -5,8 +5,8 @@ const api = require('./api');
 const server = new ApolloServer(api);
 
 exports.graphql = server.createHandler({
-  cors: {
-    origin: '*',
-    credentials: true,
-  },
+    cors: {
+      origin: '*',
+      credentials: true,
+    },
 });

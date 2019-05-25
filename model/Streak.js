@@ -1,58 +1,58 @@
-const AWS = require('aws-sdk');
 const moment = require('moment');
 const logger = require('pino')();
+const uuidv4 = require('uuid/v4');
+const _ = require('lodash');
+
+const User = require('./User');
 
 // https://www.dynamodbguide.com/leaderboard-write-sharding/
-class Streak {
-  constructor() {
-    this.tableName = process.env.STREAK_TABLE;
-
-    // Set AWS configs for tests if we have a local db
-    // Might be able to remove this with servless local dynamodb plugin
-    if (process.env.NODE_ENV === 'test') {
-      AWS.config.update({
-        region: 'us-east-1',
-        endpoint: 'http://localhost:8000',
-      });
-    }
-
-    this.docClient = new AWS.DynamoDB.DocumentClient();
-  }
-
-  /**
-   * Create streak for a user
-   *
-   * @param { String } user_id User identification as the primary key in the dynamo table
-   * @return { Object } Streak object
-   */
-  create(item, condition = null) {
-    const params = {
-      TableName: this.tableName,
-      Item: item,
-    };
-
-    if (condition) {
-      params.ConditionExpression = condition;
-    }
-
-    return this.docClient.put(params).promise();
-  }
-
+class Streak extends User {
   /**
    * Get streak for a user
    *
    * @param { String } user_id User identification as the primary key in the dynamo table
    * @return { Object } Streak object
    */
-  get(user_id) {
+  getUserStreak(user_id) {
     const params = {
       TableName: this.tableName,
-      Key: {
-        user_id,
+      KeyConditionExpression: 'user_id = :u AND begins_with(item_id, :s)',
+      ExpressionAttributeValues: {
+        ':u': user_id,
+        ':s': 'streak',
       },
     };
 
-    return this.docClient.get(params).promise();
+    return this.docClient.query(params).promise();
+  }
+
+  async getUsers(users) {
+    const keys = _.map(users, user => ({
+        user_id: user.user_id,
+        item_id: user.streak_id,
+    }));
+
+    const params = {
+      RequestItems: {
+        [this.tableName]: {
+          Keys: keys,
+        },
+      },
+    };
+
+    const {
+      Responses: table,
+    } = await this.docClient.batchGet(params).promise();
+
+    const streaks = table[`${this.tableName}`];
+
+    return _(streaks)
+      .map(streak => ({
+          score: streak.score,
+          username: streak.username,
+      }))
+      .orderBy(streak => streak.score, ['desc'])
+      .value();
   }
 
   /**
@@ -65,28 +65,35 @@ class Streak {
    */
   async upsert(user_id, username) {
     // if creation succeeds we return else the row needs to be updated.
+    let userStreakExists;
     try {
       const createParams = {
         user_id,
         username,
         score: 1,
+        item_id: `streak-${uuidv4()}`,
         streak: 'STREAK',
         expiration: moment().add(1, 'day').endOf('day').unix(),
       };
-      const results = await this.create(createParams, 'attribute_not_exists(user_id)');
-      return results;
-    } catch (err) {
-      if (err.code === 'ConditionalCheckFailedException') {
-        logger.info('Row already exists, will update streak now.');
-      } else {
-        logger.error(`Unable to update user streak for user ${user_id} with err ${err}`);
-        throw err;
+
+      userStreakExists = await this.getUserStreak(user_id);
+
+      if (_.isEmpty(userStreakExists.Items)) {
+        const results = await this.create(createParams);
+        return results;
       }
+    } catch (err) {
+      logger.error(`Unable to update user streak for user ${user_id} with err ${err}`);
+      throw err;
     }
+    logger.info('Row already exists, will update streak now.');
 
     const params = {
         TableName: this.tableName,
-        Key: { user_id },
+        Key: { 
+          user_id,
+          item_id: userStreakExists.Items[0].item_id,
+        },
         UpdateExpression: 'SET score = score + :incr, expiration = :expiration, streak = :streak',
         ExpressionAttributeValues: {
             ':incr': 1,
@@ -101,14 +108,14 @@ class Streak {
 
   getTopStreaks(Limit = 10) {
       const params = {
-          TableName: this.tableName,
-          IndexName: 'StreakIndex',
-          KeyConditionExpression: 'streak = :streak',
-          ExpressionAttributeValues: {
-            ':streak': 'STREAK',
-          },
-          ScanIndexForward: false,
-          Limit,
+        TableName: this.tableName,
+        IndexName: 'StreakIndex',
+        KeyConditionExpression: 'streak = :streak',
+        ExpressionAttributeValues: {
+          ':streak': 'STREAK',
+        },
+        ScanIndexForward: false,
+        Limit,
       };
 
       return this.docClient.query(params).promise();
