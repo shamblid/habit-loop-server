@@ -3,7 +3,7 @@ const logger = require('pino')();
 const moment = require('moment');
 const _ = require('lodash');
 
-const getConnection = cb => (
+const getConnection = () => (
     new Promise((resolve, reject) => {
         const redisClient = new Redis({
             host: process.env.REDIS_HOST,
@@ -13,30 +13,23 @@ const getConnection = cb => (
         });
 
         redisClient.on('connect', () => {
-            logger.info(`Redis client connected to host ${process.env.REDIS_HOST}`)
-            cb(null, {
-                status: 200,
-                message: 'connected',
-            })
+            logger.info(`Redis client connected to host ${process.env.REDIS_HOST}`);
         });
         redisClient.on('error', (err) => reject(err));
+        
         redisClient.on('close', () => {
-            cb(null, {
-                status: 200,
-                message: 'closed'
-            })
-            logger.info('Closing connection!')
+            logger.info('Closing connection!');
         });
 
         return resolve(redisClient);
     })
 );
 
-module.exports = async cb => {
-    const client = await getConnection(cb);
+module.exports = async () => {
+    const client = await getConnection();
 
     return {
-        getConnection: () => {
+        getConnection: async () => {
             if (_.isNil(client)) {
                 return getConnection();
             } return client;

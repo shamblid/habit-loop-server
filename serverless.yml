@@ -3,7 +3,6 @@ service: habit-api
 provider:
   name: aws
   runtime: nodejs8.10
-  profile: serverless
   stage: dev
   region: us-east-1
   tracing:
@@ -23,6 +22,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:UpdateTable
+        - dynamodb:BatchWriteItem
         - dynamodb:DescribeTimeToLive
       Resource: 
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.config.USER_TABLE}"
@@ -49,7 +49,7 @@ functions:
           method: get
 
 plugins:
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local
   - serverless-offline
 
 resources:

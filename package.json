@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "set NODE_ENV=test&& node app.js",
-    "test": "export NODE_ENV=test && export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha",
-    "postinstall": "link-module-alias"
+    "test": "export NODE_ENV=test && export NODE_PATH=$(pwd)/node_modules && find test -name '*_test.js' | xargs nyc --reporter=lcov _mocha"
   },
   "keywords": [],
   "author": "",

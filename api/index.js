@@ -6,8 +6,8 @@ const { RedisCache } = require('apollo-server-cache-redis');
 const resolvers = require('./resolvers');
 const typeDefs = require('./schema');
 const schemaDirectives = require('./directives');
-const UserModel = require('@userModel');
-const HabitModel = require('@habitModel');
+const UserModel = require('../model/User');
+const HabitModel = require('../model/Habit');
 const StreakModel = require('../model/Streak');
 const RedisModel = require('../model/Redis');
 const GroupModel = require('../model/Group');
@@ -31,16 +31,18 @@ module.exports = {
   resolvers,
   typeDefs,
   schemaDirectives,
-  context: async ({ event, context }) => ({
-    logger,
-    context,
-    user: getAuth(event.headers),
-    UserModel: new UserModel(),
-    StreakModel: new StreakModel(),
-    HabitModel: new HabitModel(),
-    GroupModel: new GroupModel(),
-    Redis: RedisModel.streak,
-  }),
+  context: async ({ event, context }) => {
+    return {
+      logger,
+      context,
+      user: getAuth(event.headers),
+      UserModel: new UserModel(),
+      StreakModel: new StreakModel(),
+      HabitModel: new HabitModel(),
+      GroupModel: new GroupModel(),
+      Redis: RedisModel,
+    };
+  },
   // cache: new RedisCache({
   //   connectTimeout: 5000,
   //   reconnectOnError: function (err) {

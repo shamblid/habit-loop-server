@@ -1,5 +1,4 @@
 const User = require('./User');
-const uuidv4 = require('uuid/v4');
 
 const removeLastComma = (str) => str.replace(/,(\s+)?$/, '');   
 
