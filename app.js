@@ -10,19 +10,16 @@ const runApollo = (event, context, apollo) => new Promise((resolve, reject) => {
   apollo(event, context, callback);
 });
 
-exports.graphql = async (event, context) => {
-  const connection = await RedisModel.getConnection();
-  RedisModel.setConnection(connection);
-  
+exports.graphql = async (event, context, callback) => {
+  const connection = await RedisModel();
+  context.callbackWaitsForEmptyEventLoop = false;
+
   const apollo = server.createHandler({
     cors: {
       origin: '*',
       credentials: true,
     },
   });
-  
-  const response = await runApollo(event, context, apollo);
 
-  RedisModel.disconnect();
-  return response;
+  return apollo(event, context, callback);
 };

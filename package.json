@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-server-cache-redis": "^0.4.0",
     "apollo-server-lambda": "^2.4.8",
     "aws-sdk": "^2.361.0",
     "bcrypt": "^3.0.5",
