@@ -95,10 +95,12 @@ const resolver = {
         } = args;
     
         try {
-          const results = await ctx.HabitModel.delete(item_id, ctx.user.user_id);
+          const results = await ctx.HabitModel.delete(ctx.user.user_id, item_id);
+
           return results;
         } catch (err) {
           ctx.logger.error(err);
+
           return err;
         }
       },
