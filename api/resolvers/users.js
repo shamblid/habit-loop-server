@@ -52,7 +52,7 @@ const resolvers = {
         const {
           Items: streakData,
         } = await StreakModel.getUserStreak(user.user_id);
-        return streakData[0];
+        return _.get(streakData, '[0]', 0);
       } catch (err) {
         logger.error(`Problem getting user streak: ${err}`);
         return err;
