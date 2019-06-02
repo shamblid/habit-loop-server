@@ -50,7 +50,7 @@ const resolver = {
           return results.Item;
         } catch (err) {
           ctx.logger.error(err);
-          throw err;
+          return err;
         }
       },
 
@@ -60,7 +60,7 @@ const resolver = {
           return results.Items;
         } catch (err) {
           logger.error('Error getting all habits.');
-          throw err;
+          return err;
         }
       },
 
@@ -85,22 +85,21 @@ const resolver = {
           return results;
         } catch (err) {
           ctx.logger.error(err);
-          throw err;
+          return err;
         }
       },
 
       async deleteHabit(instance, args, ctx) {
         const {
-          habit_id: habitId,
-          created_at: createdAt,
+          item_id,
         } = args;
     
         try {
-          const results = await ctx.HabitModel.delete(habitId, createdAt);
+          const results = await ctx.HabitModel.delete(item_id, ctx.user.user_id);
           return results;
         } catch (err) {
           ctx.logger.error(err);
-          throw err;
+          return err;
         }
       },
 
@@ -117,7 +116,7 @@ const resolver = {
           return results;
         } catch (err) {
           ctx.logger.error(err);
-          throw err;
+          return err;
         }
       },
 

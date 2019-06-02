@@ -82,12 +82,12 @@ class Habit extends User {
     return this.docClient.put(params).promise();
   }
 
-  async delete(habitId, createdAt) {
+  async delete(user_id, item_id) {
     const params = {
       TableName: this.tableName,
       Key: {
-        habit_id: habitId,
-        created_at: createdAt,
+        user_id,
+        item_id,
       },
     };
 
