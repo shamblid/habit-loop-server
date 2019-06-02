@@ -10,7 +10,7 @@ const habitDefs = gql`
 	
 	extend type Mutation {
 		createHabit(input: HabitInput): Habit @requireAuth(role: USER)
-		deleteHabit(habit_id: String!, created_at: String!): Habit
+		deleteHabit(item_id: String!): Habit
 		addHabitForUser(user_id: String!, input: HabitInput): Habit @requireAuth(role: MANAGER)
 		updateHabit(input: UpdateHabitInput!): Habit 
 		updatePriority(priority: Rank!, habit_id: String!, created_at: String!): Habit
