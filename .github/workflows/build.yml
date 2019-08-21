@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: 12.x
 
     steps:
     - uses: actions/checkout@v1
@@ -19,10 +19,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: setup to use npm and deploy w/ serverless
       run: |
+        export NODE_ENV=dev
         npm install
         npm install -g serverless
     - name: Deploy to serverless
       run: |
-        NODE_ENV=dev
         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         serverless deploy | tee deploy.out
