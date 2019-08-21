@@ -10,8 +10,8 @@ provider:
   environment:
     NODE_ENV: ${env:NODE_ENV}
     USER_TABLE: ${self:custom.config.USER_TABLE}
-    REDIS_HOST: "redis-17149.c14.us-east-1-2.ec2.cloud.redislabs.com"
-    REDIS_PASSWORD: ${ssm:habit_loop_redis_password}
+    REDIS_HOST: ${env:REDIS_HOST}
+    REDIS_PASSWORD: ${env:REDIS_SECRET}
   iamRoleStatements:
     - Effect: Allow
       Action:
