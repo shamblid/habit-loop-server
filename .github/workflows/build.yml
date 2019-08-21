@@ -19,10 +19,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: setup to use npm and deploy w/ serverless
       run: |
-        export NODE_ENV=dev
         npm install
         npm install -g serverless
     - name: Deploy to serverless
+      env: 
+        NODE_ENV: dev
       run: |
         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         serverless deploy | tee deploy.out
