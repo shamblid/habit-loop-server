@@ -24,5 +24,5 @@ jobs:
     - name: Deploy to serverless
       run: |
         NODE_ENV=dev
-        serverless config credentials --provider aws --key ${{ secret.AWS_ACCESS_KEY_ID }} --secret ${{ secret.AWS_SECRET_ACCESS_KEY }}
+        serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         serverless deploy | tee deploy.out
